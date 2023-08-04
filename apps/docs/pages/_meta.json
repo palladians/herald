@@ -1,0 +1,33 @@
+{
+	"--": {
+		"type": "separator",
+		"title": "Herald Stack"
+	},
+	"index": "Herald",
+	"architecture": "Architecture",
+	"why": "Why",
+	"---": {
+		"type": "separator",
+		"title": "Build on Herald"
+	},
+	"build": "Get started",
+	"config": "Configure",
+	"tools": "Tooling",
+	"ecosystem": "Ecosystem",
+	"contribute": "Contribute",
+	"----": {
+		"type": "separator",
+		"title": "Security"
+	},
+	"security": "FAQ",
+	"about": {
+		"title": "About",
+		"type": "page"
+	},
+	"contact": {
+		"title": "Contact ↗",
+		"type": "page",
+		"href": "https://t.me/Contact",
+		"newWindow": true
+	}
+}
