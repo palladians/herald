@@ -11,6 +11,9 @@
       "default": "./dist/index.js"
     }
   },
+  "engines": {
+    "node": "--experimental-vm-modules --experimental-wasm-threads"
+},
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -25,6 +28,6 @@
     "vitest": "^0.33.0"
   },
   "dependencies": {
-    "snarkyjs": "^0.11.*"
+    "snarkyjs": "^0.12.*"
   }
 }
