@@ -1,0 +1,30 @@
+{
+  "name": "@herald/data-model",
+  "description": "Module template for new packages",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules dist .turbo"
+  },
+  "devDependencies": {
+    "@herald/common": "*",
+    "@tsconfig/strictest": "^2.0.1",
+    "happy-dom": "^10.7.0",
+    "tsup": "^6.7.0",
+    "vitest": "^0.33.0"
+  },
+  "dependencies": {
+    "snarkyjs": "^0.11.*"
+  }
+}
