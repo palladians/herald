@@ -1,6 +1,6 @@
 import { PublicKey } from "snarkyjs";
-import { ClaimType } from "../src/types"
-import { flattenObject } from "../src/utils";
+import { ClaimType } from "../types"
+import { flattenObject } from "./conversion";
 
 export function createMockCredential(subjectPublicKey: PublicKey): {[key: string]: ClaimType} {
     const credential = {

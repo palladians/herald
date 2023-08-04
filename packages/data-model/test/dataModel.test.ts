@@ -1,8 +1,10 @@
-import { Poseidon, PrivateKey } from "snarkyjs";
+import { Field, Poseidon, PrivateKey } from "snarkyjs";
 import { constructClaim, constructSignedClaim, constructPresentation } from "../src/utils/construction";
 import { claimToField, stringToField } from "../src/utils/conversion";
 import { verifyPresentation } from "../src/utils/verification";
-import { createMockCredential } from "./testCredentialUtil";
+import { createMockCredential } from "../src/utils/testCredentialUtil";
+import { describe, it } from '@jest/globals';
+
 describe('Claims and SignedClaims', () => {
 
     it('can construct a claim', () => {
@@ -90,7 +92,7 @@ describe('Claims and SignedClaims', () => {
         const subjectWitness = claim.getWitness("subject");
         const expectedValue = claimToField(subjectPublicKey); 
         const [computedRoot, _] = subjectWitness.computeRootAndKey(expectedValue);
-        const isAboutCorrectSubject = computedRoot.equals(signedClaim.claimRoot).toBoolean();
+        const isAboutCorrectSubject = computedRoot?.equals(signedClaim.claimRoot).toBoolean();
         expect(isAboutCorrectSubject).toBe(true);
       });
       it('subject can create verifiable presentation with issued credential', () => { 
@@ -126,8 +128,8 @@ describe('Claims and SignedClaims', () => {
           issuerPublicKey,
           subjectPublicKey,
           claim,
-          expectedKeys,
-          expectedValues
+          expectedKeys as string[],
+          expectedValues as Field[]
         );
     
         expect(isVerified).toBe(true);
