@@ -25,11 +25,9 @@ jobs:
       - name: Setup env
         uses: ./.github/actions/setup
       - name: Build with Next.js
-        run: |
-          pnpm build
+        run: pnpm build
       - name: Export with Next.js
-        run: |
-          pnpm export
+        run: pnpm export
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
