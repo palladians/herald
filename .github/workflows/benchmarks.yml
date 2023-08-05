@@ -1,0 +1,38 @@
+# Workflow for credential-proving benchmarks
+name: Run benchmarks
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: "benchmark"
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup env
+        uses: ./.github/actions/setup
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run benchmarks
+        run: pnpm run benchmark
+
+      - name: Commit benchmark results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update benchmark results" -a || echo "No changes to commit"
