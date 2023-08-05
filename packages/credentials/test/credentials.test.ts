@@ -1,6 +1,7 @@
 import { PrivateKey, verify } from "snarkyjs";
-import { ClaimType, Rule } from "@herald/data-model";
+import { ClaimType, Rule } from "@herald-sdk/data-model";
 import { Credential } from "../src"; 
+import { describe, it } from '@jest/globals';
 
 describe('Credential', () => {
     it('can construct a credential', () => {

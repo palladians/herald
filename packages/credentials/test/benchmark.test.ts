@@ -1,7 +1,8 @@
 import { PrivateKey, verify } from "snarkyjs";
-import { ClaimType, Rule } from "@herald/data-model";
+import { ClaimType, Rule } from "@herald-sdk/data-model";
 import { Credential } from "../src";
 import fs from 'fs';
+import { describe, it } from '@jest/globals';
 
 
 describe('Credential Benchmark', () => {
@@ -24,7 +25,10 @@ describe('Credential Benchmark', () => {
         console.timeEnd("proofTime");
         const duration = console.timeEnd("proofTime");
         const benchmarkData = require('../../../apps/docs/public/benchmarks/credential-proving.json');
-        benchmarkData.push({name: 'New Benchmark', duration: duration});
+        const date = new Date();
+        const dateString = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+
+        benchmarkData.push({name: `Benchmark ${dateString}`, duration: duration});
         fs.writeFileSync('../../../apps/docs/public/benchmarks/credential-proving.json', JSON.stringify(benchmarkData));
 
         console.log("attestationProof Verification: ", await verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey));
