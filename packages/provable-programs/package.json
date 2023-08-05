@@ -1,6 +1,6 @@
 {
-  "name": "@herald/provable-programs",
-  "description": "Module template for new packages",
+  "name": "@herald-sdk/provable-programs",
+  "description": "A package of provable programs for the Herald SDK that use zk-SNARKs.",
   "version": "1.0.0",
   "type": "module",
   "module": "dist/index.js",
@@ -18,8 +18,8 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "devDependencies": {
-    "@herald/common": "*",
-    "@herald/data-model": "*",
+    "@herald-sdk/common": "*",
+    "@herald-sdk/data-model": "*",
     "@tsconfig/strictest": "^2.0.1",
     "@types/jest": "^29.5.3",
     "happy-dom": "^10.7.0",

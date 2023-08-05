@@ -1,6 +1,6 @@
 {
-  "name": "@herald/data-model",
-  "description": "Module template for new packages",
+  "name": "@herald-sdk/data-model",
+  "description": "A package that encapsulates the required data model of verifiable credentials using snarkyjs.",
   "version": "1.0.0",
   "type": "module",
   "module": "dist/index.js",
@@ -18,7 +18,7 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "devDependencies": {
-    "@herald/common": "*",
+    "@herald-sdk/common": "*",
     "@tsconfig/strictest": "^2.0.1",
     "@types/jest": "^29.5.3",
     "happy-dom": "^10.7.0",

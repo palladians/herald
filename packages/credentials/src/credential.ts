@@ -1,6 +1,6 @@
 import { Poseidon, PrivateKey, Proof, PublicKey } from "snarkyjs";
-import { Claim, ClaimType, CredentialPresentation, Rule, SignedClaim, constructClaim, constructSignedClaim } from "@herald/data-model";
-import {AttestCredentials, PublicInputArgs} from "@herald/provable-programs";
+import { Claim, ClaimType, CredentialPresentation, Rule, SignedClaim, constructClaim, constructSignedClaim } from "@herald-sdk/data-model";
+import {AttestCredentials, PublicInputArgs} from "@herald-sdk/provable-programs";
 
 export type proveReturnType = {
     attestationProof: Proof<PublicInputArgs, void>,

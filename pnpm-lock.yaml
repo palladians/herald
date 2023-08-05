@@ -79,13 +79,13 @@ importers:
         specifier: ^0.12.1
         version: 0.12.1
     devDependencies:
-      '@herald/common':
+      '@herald-sdk/common':
         specifier: '*'
         version: link:../common
-      '@herald/data-model':
+      '@herald-sdk/data-model':
         specifier: '*'
         version: link:../data-model
-      '@herald/provable-programs':
+      '@herald-sdk/provable-programs':
         specifier: '*'
         version: link:../provable-programs
       '@tsconfig/strictest':
@@ -116,7 +116,7 @@ importers:
         specifier: ^0.12.*
         version: 0.12.1
     devDependencies:
-      '@herald/common':
+      '@herald-sdk/common':
         specifier: '*'
         version: link:../common
       '@tsconfig/strictest':
@@ -147,10 +147,10 @@ importers:
         specifier: ^0.12.1
         version: 0.12.1
     devDependencies:
-      '@herald/common':
+      '@herald-sdk/common':
         specifier: '*'
         version: link:../common
-      '@herald/data-model':
+      '@herald-sdk/data-model':
         specifier: '*'
         version: link:../data-model
       '@tsconfig/strictest':
