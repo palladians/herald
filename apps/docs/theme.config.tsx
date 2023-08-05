@@ -8,9 +8,9 @@ const config: DocsThemeConfig = {
 		link: "https://github.com/palladians/herald",
 	},
 	chat: {
-		link: "https://t.me/",
+		link: "https://discord.com/channels/1127906495409958953/1137446548469448805",
 	},
-	docsRepositoryBase: "https://github.com/palladians/herald-docs/tree/main",
+	docsRepositoryBase: "https://github.com/palladians/herald/tree/main/apps/docs",
 	footer: {
 		text: (
 			<span>MIT {new Date().getFullYear()} © Herald - Credential Creation & Proving</span>
@@ -21,7 +21,7 @@ const config: DocsThemeConfig = {
 			<span>Contribute to Herald | Edit on GitHub</span>
 		),
 	},
-	primaryHue: 10,
+	primaryHue: {light: 45, dark: 45},
 	useNextSeoProps() {
 		const { asPath } = useRouter();
 		if (asPath !== "/") {

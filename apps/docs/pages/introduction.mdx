@@ -1,0 +1,34 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Introduction
+
+Heraldry is a timeless concept, rich with symbolism and tradition, a way of communicating identity and authority through visual emblems and marks. The act of heralding is an announcement, a proclamation, an unveiling of something significant. In the context of our digital era, Herald is here to invoke the essence of heraldry in a transformative way.
+
+In our connected world, identity and trust have always been intertwined. The authenticity of digital identities has never been more crucial. It's the invisible thread that holds together the fabric of our online interactions and transactions.
+
+<Callout type="default" emoji="📣">
+  As Albert Einstein aptly put it, "Whoever is careless with the truth in small matters cannot be trusted with important matters."
+</Callout>
+
+Our understanding of digital identity is often tied to physical or state-issued documents, such as passports, driving licenses, or social security numbers. This notion suggests that one's identity is or credentials are:
+- Only as resilient as the paper or plastic they're imprinted on; tying our digital existence to fragile, physical entities.
+- Only as reliable or recoverable as the issuing authority; leaving us vulnerable to errors and inefficiencies.
+- Tied to geographical boundaries.
+- Susceptible to theft or loss.
+- Prone to privacy invasion, with our most sensitive information at the mercy of any potential data breaches or those inspecting the documents.
+
+We are more than our paper trails.
+
+We continue to be in the midst of accelerating digital evolution. Age-old systems from the physical world are struggling to catch up with the ascending relevance and complexity of the digital sphere. As these worlds continue to intertwine, it's clear that this disjointed approach requires a revolutionary shift.
+
+This gives us an unprecedented chance to craft systems from scratch that bridge these two worlds. Systems powered by an enhanced understanding of digital identity, striking a balance between privacy and transparency, individuality and commonality.
+
+If carefully architected, these systems could transform the way modern society perceives and interacts with digital identities. They could get us closer to representing our 'digital selves' authentically, enabling trust, and fostering stronger digital relationships.
+
+In the grand scheme of digital credentials and identity, **standards serve as our guiding light**, ensuring consistency and interoperability across platforms. The World Wide Web Consortium (W3C), in its visionary endeavor, has laid significant groundwork in this realm.
+
+The [Universal Wallet 2020](https://w3c-ccg.github.io/universal-wallet-interop-spec/#introduction), a W3C specification, introduces us to a portable, extensible, JSON-LD wallet representation that caters to digital currencies and credentials. It's a crucial step towards establishing a common language for digital wallets, irrespective of their underlying technology or purpose.
+
+Most pertinent to Herald, however, is the W3C's [Verifiable Credentials Data Model v1.1](https://www.w3.org/TR/vc-data-model/). This specification, recommended on 03 March 2022, paves the way for a cryptographically secure, privacy respecting, and machine-verifiable representation of credentials on the web. The W3C's data model brings this conventional concept into the digital realm, providing a standardized mechanism to express and verify such credentials on the web.
+
+**Herald's mission is to align with these standards and to create a library that not just adheres to, but fully embraces this model adding the benefits of zk-SNARKs**. In order to do so, Herald abstracts over Mina Protocol's SnarkyJS language, which in turn, is an abstraction over [Kimchi](https://github.com/o1-labs/proof-systems), a variant of [PLONK](https://eprint.iacr.org/2019/953.pdf). This layered abstraction allows us to deliver a solution that can be used for either client-side or server-side proving that is as user-friendly as it is powerful, making the intricacies of cryptographic proof systems and digital credential management more accessible to developers and end-users alike.

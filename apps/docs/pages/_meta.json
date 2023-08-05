@@ -4,6 +4,7 @@
 		"title": "Herald Stack"
 	},
 	"index": "Herald",
+	"introduction": "Introduction",
 	"architecture": "Architecture",
 	"why": "Why",
 	"---": {
@@ -27,7 +28,7 @@
 	"contact": {
 		"title": "Contact ↗",
 		"type": "page",
-		"href": "https://t.me/Contact",
+		"href": "https://discord.com/channels/1127906495409958953/1137446548469448805",
 		"newWindow": true
 	}
 }

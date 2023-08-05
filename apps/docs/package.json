@@ -11,9 +11,9 @@
   "author": "Teddy Pender <email@email.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/"
+    "url": "https://github.com/palladians/herald/issues"
   },
-  "homepage": "https://github.com/",
+  "homepage": "https://github.com/palladians/herald",
   "dependencies": {
     "next": "^13.0.6",
     "nextra": "latest",
