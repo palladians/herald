@@ -27,6 +27,11 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install & build packages
+        run: |
+          pnpm i
+          pnpm run build
+
       - name: Run benchmarks
         run: |
           cd packages/credentials
