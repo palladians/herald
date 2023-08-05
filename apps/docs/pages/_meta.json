@@ -11,6 +11,7 @@
 		"type": "separator",
 		"title": "Build on Herald"
 	},
+	"benchmarks": "Benchmarks",
 	"build": "Get started",
 	"config": "Configure",
 	"tools": "Tooling",
