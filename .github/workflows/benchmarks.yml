@@ -3,8 +3,8 @@ name: Run benchmarks
 
 on:
   push:
-    branches:
-      - master
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: write
