@@ -2,8 +2,8 @@
 name: Run benchmarks
 
 on:
-  push:
-    branches: ["main"]
+  schedule:
+    - cron: '0 0 */2 * *'
   workflow_dispatch:
 
 permissions:
@@ -33,9 +33,7 @@ jobs:
           pnpm run build
 
       - name: Run benchmarks
-        run: |
-          cd packages/credentials
-          pnpm run benchmark
+        run: pnpm run benchmark
 
       - name: Commit benchmark results
         run: |

@@ -5,7 +5,8 @@
     "export": "turbo run export",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "benchmark": "node --experimental-vm-modules --experimental-wasm-threads node_modules/jest/bin/jest.js packages/credentials/test/benchmark.test.ts"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.1",
@@ -17,7 +18,9 @@
     "tsup": "^6.7.0",
     "turbo": "latest",
     "typescript": "^5.0.4",
-    "vitest": "^0.31.4"
+    "vitest": "^0.31.4",
+    "@types/jest": "^29.5.3",
+    "ts-jest": "^29.1.1"
   },
   "packageManager": "pnpm@8.6.10",
   "name": "herald"
