@@ -39,6 +39,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git checkout -b benchmark-results
           git add .
           git commit -m "Update benchmark results" -a || echo "No changes to commit"
-          git push https://${{ secrets.PAT_DOCS }}@github.com/palladians/herald.git
+          git push origin benchmark-results
