@@ -41,3 +41,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add .
           git commit -m "Update benchmark results" -a || echo "No changes to commit"
+          git push https://${{ secrets.PAT_DOCS }}@github.com/palladians/herald.git
