@@ -5,17 +5,46 @@ import ProofSizeAreaChart from '../components/ProofSizeAreaChart'
 
 # Benchmarks
 
+The machine running these benchmark is a Linux-based virtual machine.
+
+Here are the key hardware specifications of this machine:
+
+- **CPU**: An 8-core CPU offering a high degree of parallelism for tasks that can utilize multiple threads.
+- **Memory**: 32 GB of RAM, providing ample space for running programs that require significant memory resources.
+- **Storage**: A 300 GB SSD that provides high-speed data access for quick read/write operations.
+- The machine operates on the latest version of Ubuntu available as of the year 2022 (Ubuntu 22.04). 
+
 ## Proving Time Benchmarks
+**Proving Time** refers to the duration it takes to generate a zk-SNARK proof. This benchmark measures the efficiency of proof generation in Herald. In the context of **Herald** it is the speed at which a client can produce a proof attesting to some `Rule` provided by a challenger; an example would be how quality a subject can prove their age is greater than or equal to 18 if they own a credential issued to them by a specific issuer.
+
+Efficient proof generation is crucial to the interaction design of applications, especially those that rely on frequent or time-sensitive zk-SNARK proofs. Faster proving times lead to more responsive applications and better user experience. However, it's important to note that proving time can be influenced by several factors, including computational resources, circuit sizes, and the complexity of the computation being proved. Importantly proving time efficiency requirements may vary per user, a sequencer may not need blazing fast proving time, but a wallet may require proving times to be fast given user experience requirements.
+
+The chart below visualizes the trend in proving times, allowing users to understand how updates or modifications to Herald have influenced proving efficiency over time.
+
 <div style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
   <ProvingTimeAreaChart />
 </div>
 
 ## Verification Time Benchmarks
+
+**Verification Time** is the duration required to verify zk-SNARK proof. This benchmark measures how efficiently a challenger can verify proofs produced by a subject.
+
+The ability to quickly verify proofs is fundamental to the overall performance of systems that rely on zk-SNARKs. Swift verification times allow for quicker confirmations and, consequently, better real-time application responsiveness. zk-SNARK verification times should be 🔥 blazing 🔥 fast! 
+
+The chart below provides a visualization of verification times, helping users to see how performance has changed over time and how updates to Herald have impacted verification efficiency.
+
 <div style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
   <VerificationTimeAreaChart />
 </div>
 
 ## Proof Size Benchmarks
+
+**Proof Size** relates to the physical storage space that a zk-SNARK proof occupies. This benchmark measures Herald's ability in generating compact proofs. zk-SNARK proofs are succinct by definition! 🔎
+
+The size of the proof is an important factor in storage and transmission costs, particularly in decentralized systems where data must be propagated across the network. Smaller proofs mean less storage usage and faster transmission times, leading to more efficient and scalable applications.
+
+The chart below visualizes changes in proof sizes over time. This allows users to evaluate the space-efficiency of Herald and how updates or changes have influenced the size of the proofs being generated.
+
 <div style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
   <ProofSizeAreaChart />
 </div>
