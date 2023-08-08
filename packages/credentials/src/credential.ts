@@ -1,5 +1,5 @@
 import { Poseidon, PrivateKey, Proof, PublicKey } from "snarkyjs";
-import { Claim, ClaimType, CredentialPresentation, Rule, SignedClaim, constructClaim, constructSignedClaim } from "@herald-sdk/data-model";
+import { Claim, ClaimType, CredentialPresentation, SignedClaim, constructClaim, constructSignedClaim } from "@herald-sdk/data-model";
 import {AttestCredentials, PublicInputArgs} from "@herald-sdk/provable-programs";
 
 export type proveReturnType = {
@@ -46,20 +46,18 @@ export class Credential {
     // should take arguments that include those from a challenge object provided to the owner of the credentials
     // A challenge can include asserting e.g. the claim "age" is greater than 18, the claim is signed by an expected issuer, etc.
     // this should be a ZkProgram & must include the signature of the subject
-    public async prove(claimKey: string, issuerPubKey: PublicKey, rule: Rule, subjectPrvKey: PrivateKey): Promise<proveReturnType> {
+    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey): Promise<proveReturnType> {
         const claimWitness = this.claim.getWitness(claimKey);
         const claimValue = this.claim.getField(claimKey);
         if (!claimValue) {
             throw new Error("Claim key not found");
         }
         const credentialPresentation = new CredentialPresentation(this.signedClaim, subjectPrvKey);
-        
-        const publicInputs = new PublicInputArgs(issuerPubKey, subjectPrvKey.toPublicKey(), rule);
         console.log("compiling...")
         const { verificationKey } = await AttestCredentials.compile();
         console.log("compiling complete")
         console.log("proving...")
-        const proof = await AttestCredentials.attest(publicInputs, claimWitness, claimValue, this.signedClaim, credentialPresentation);
+        const proof = await AttestCredentials.attest(challenge, claimWitness, claimValue, this.signedClaim, credentialPresentation);
         console.log("proving complete")
         return { attestationProof: proof, verificationKey: verificationKey };
     }

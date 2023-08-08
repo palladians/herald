@@ -6,7 +6,6 @@ import { createMockCredential } from "../src/utils/testCredentialUtil";
 import { describe, it } from '@jest/globals';
 
 describe('Claims and SignedClaims', () => {
-
     it('can construct a claim', () => {
       const subjectPrvKey = PrivateKey.random();
       const subjectPublicKey = subjectPrvKey.toPublicKey();

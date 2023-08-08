@@ -2,6 +2,7 @@ import { PrivateKey, verify } from "snarkyjs";
 import { ClaimType, Rule } from "@herald-sdk/data-model";
 import { Credential } from "../src/credential";
 import fs from 'fs';
+import { PublicInputArgs } from "@herald-sdk/provable-programs";
 
 // the relative path to the benchmark data file is as if the test is run from the root of the monorepo
 const provingTimeBenchmarkData = JSON.parse(fs.readFileSync('./apps/docs/public/benchmarks/credential-proving.json', 'utf8'));
@@ -22,9 +23,13 @@ describe('Credential Benchmark', () => {
         const operation = "gte";
         const value = 18;
         const rule = new Rule(property, operation, value);
+        // create challenge
+        const issuerPubKey = issuerPrvKey.toPublicKey();
+        const subjectPubKey = subjectPrvKey.toPublicKey();
+        const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
         // start proving time benchmark
         const startTime = Date.now();
-        const proofResponse = await credential.prove("age", issuerPrvKey.toPublicKey(), rule, subjectPrvKey);
+        const proofResponse = await credential.prove("age", challenge, subjectPrvKey);
         const duration = Date.now() - startTime;
         const durationSeconds = duration / 1000;
 

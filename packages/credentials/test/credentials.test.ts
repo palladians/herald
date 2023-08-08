@@ -2,6 +2,7 @@ import { PrivateKey, verify } from "snarkyjs";
 import { ClaimType, Rule } from "@herald-sdk/data-model";
 import { Credential } from "../src"; 
 import { describe, it } from '@jest/globals';
+import { PublicInputArgs } from "@herald-sdk/provable-programs";
 
 describe('Credential', () => {
     it('can construct a credential', () => {
@@ -66,15 +67,20 @@ describe('Credential', () => {
             age: 21,
             subject: subjectPrvKey.toPublicKey()
         };
-
+        // issue credentials to subject
         const credential = Credential.create(claims, issuerPrvKey);
+        // create rule to prove
         const property = "age";
         const operation = "gte";
         const value = 18;
         const rule = new Rule(property, operation, value);
         console.log("rule: ", rule);
+        // create challenge
+        const issuerPubKey = issuerPrvKey.toPublicKey();
+        const subjectPubKey = subjectPrvKey.toPublicKey();
+        const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
         
-        const proofResponse = await credential.prove("age", issuerPrvKey.toPublicKey(), rule, subjectPrvKey);
+        const proofResponse = await credential.prove("age", challenge, subjectPrvKey);
         console.log("attestationProof Verification: ", await verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey));
         expect(verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey)).toBeTruthy();
     });

@@ -111,6 +111,5 @@ This class represents a digital credential containing a `MerkleMap` of claims (c
     Description: A subject can produces a Zero-Knowledge Proof that attests to a certain claim within the credentials per a given `Rule` from a challenger.
     - Parameters:
       - `claimKey`: A string representing the key of the claim to attest.
-      - `issuerPubKey`: The public key of the issuer.
-      - `rule`: The rule used to create the attestation.
+      - `challenge`: The challenge object that contains the issuer, subject public keys, and the `Rule` defined by the challenger.
       - `subjectPrvKey`: The private key of the subject (credential holder).

@@ -36,10 +36,11 @@ const claims: {[key: string]: ClaimType} = {
 const credential = Credential.create(claims, issuerPrvKey);
 ```
 
-### Create a `Rule`
-As a challenger, you want the subject to prove they meet some requirements like whether the subject is older than 18.
+### Create a challenge
+As a challenger, you want the subject to prove they meet some requirements like whether the subject is older than 18 and that a specific issuer has made this claim about the subject.
 ```ts
 import { Rule } from "@herald-sdk/data-model";
+import { PublicInputArgs } from "@herald-sdk/provable-programs"
 
 // what property of the credentials is the challenger challenging
 const property = "age";
@@ -49,13 +50,18 @@ const operation = "gte";
 const value = 18;
 // create the `Rule`
 const rule = new Rule(property, operation, value);
+
+// create the challenge object
+const issuerPubKey = "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv";
+const subjectPubKey = "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq";
+const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
 ```
 
-### Prove your credentials can satisfy this `Rule`'s constraints
+### Prove your credentials can satisfy this challenge's constraints
 As a holder of a `Credential`, a subject can prove properties about their credentials given constraints. Note: the issuer public key needs to be assigned in the `Rule` (this is a TODO).
 ```ts
 // given a rule and an expected issuer a holder of a `Credential` can `prove` properties of their credential
-const proofResponse = await credential.prove("age", "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv", rule, subjectPrvKey);
+const proofResponse = await credential.prove("age", challenge, subjectPrvKey);
 ```
 
 ### Verify the Proof
@@ -115,23 +121,29 @@ const claims = constructClaim(flattenedCredential)
 const credential = Credential.create(claims, issuerPrvKey);
 ```
 
-### Construct rule
-As a challenger you want to know if the credential a subject has is a Bachelor's Degree. We need a new `Rule` for this! Remember the credential's property is now a flattened object so the rule we create must check if the "credentialSubject.degree.type" property equals "BachelorDegree".
+### Construct Challenge
+As a challenger you want to know if the credential a subject has is a Bachelor's Degree. We need a new `Rule` for this! Remember the credential's property is now a flattened object so the rule we create must check if the "credentialSubject.degree.type" property equals "BachelorDegree". The challenge is now an object that contains all constraints the prover must satisfy.
 
 ```ts
 import { Rule } from "@herald-sdk/data-model";
+import { PublicInputArgs } from "@herald-sdk/provable-programs";
 
 const property = "credentialSubject.degree.type";
 const operation = "eq";
 const value = "BachelorDegree";
 
 const rule = new Rule(property, operation, value);
+
+// create the challenge object
+const issuerPubKey = "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv";
+const subjectPubKey = "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq";
+const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
 ```
 
 ### Prove that the Credential can satisfy this Rule.
-As the subject and credential owner, we can now make a proof using this rule.
+As the subject and credential owner, we can now make a proof using this challenge.
 ```ts
-const proofResponse = await credential.prove("credentialSubject.degree.type", "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv", rule, subjectPrvKey);
+const proofResponse = await credential.prove("credentialSubject.degree.type", challenge, subjectPrvKey);
 ```
 
 ### Verify the Proof
