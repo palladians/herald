@@ -57,6 +57,11 @@ const subjectPubKey = "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq";
 const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
 ```
 
+Once the challenge has been created by the challenger, then they must give it to the prover, their interaction looks similar to the following diagram:
+
+![stack](../static/img/challenger_subject_interaction.png)
+
+
 ### Prove your credentials can satisfy this challenge's constraints
 As a holder of a `Credential`, a subject can prove properties about their credentials given constraints. Note: the issuer public key needs to be assigned in the `Rule` (this is a TODO).
 ```ts
