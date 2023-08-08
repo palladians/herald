@@ -37,7 +37,15 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git checkout -b benchmark-results
+          
+          if git show-ref --quiet refs/remotes/origin/benchmark-results; then
+            git fetch origin benchmark-results
+            git checkout benchmark-results
+            git merge FETCH_HEAD
+          else
+            git checkout -b benchmark-results
+          fi
+
           git add .
-          git commit -m "Update benchmark results" -a || echo "No changes to commit"
+          git commit -m "Update benchmark results" || echo "No changes to commit"
           git push origin benchmark-results
