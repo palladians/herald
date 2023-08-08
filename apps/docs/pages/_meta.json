@@ -5,14 +5,16 @@
 	},
 	"index": "Herald",
 	"introduction": "Introduction",
+	"ideas": "Key Ideas",
 	"architecture": "Architecture",
 	"why": "Why",
+	"future": "Future Features",
 	"---": {
 		"type": "separator",
 		"title": "Build on Herald"
 	},
 	"benchmarks": "Benchmarks",
-	"build": "Get started",
+	"build": "Get Started",
 	"config": "Configure",
 	"tools": "Tooling",
 	"ecosystem": "Ecosystem",

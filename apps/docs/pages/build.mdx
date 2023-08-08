@@ -15,4 +15,131 @@ We first need to make sure you have everything needed to complete this tutorial.
 | TypeScript | latest | `npm install -g typescript` |
 | snarkyjs | 0.11.* (as a peer dependency) | `npm install snarkyjs@0.11.*` |
 
+### Create a credential
+Let's create a credential for a subject who is 21 years old.
+```ts
+import { Credential } from @herald-sdk/credentials
+import { PrivateKey } from "snarkyjs";
+import { ClaimType } from "@herald-sdk/data-model";
+
+
+// generate issuer private keys
+const issuerPrvKey = PrivateKey.random();
+
+// construct a claim about the subject
+const claims: {[key: string]: ClaimType} = {
+    age: 21, 
+    subject: "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq"
+};
+
+// construct a credential using the claim and the issuer private key
+const credential = Credential.create(claims, issuerPrvKey);
+```
+
+### Create a `Rule`
+As a challenger, you want the subject to prove they meet some requirements like whether the subject is older than 18.
+```ts
+import { Rule } from "@herald-sdk/data-model";
+
+// what property of the credentials is the challenger challenging
+const property = "age";
+// what constraint does the subject need to prove; in this case that the "age" is greater than or equal to `value`
+const operation = "gte";
+// what value does the property "age" need to be greater than or equal to
+const value = 18;
+// create the `Rule`
+const rule = new Rule(property, operation, value);
+```
+
+### Prove your credentials can satisfy this `Rule`'s constraints
+As a holder of a `Credential`, a subject can prove properties about their credentials given constraints. Note: the issuer public key needs to be assigned in the `Rule` (this is a TODO).
+```ts
+// given a rule and an expected issuer a holder of a `Credential` can `prove` properties of their credential
+const proofResponse = await credential.prove("age", "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv", rule, subjectPrvKey);
+```
+
+### Verify the Proof
+As a challenger, you can verify whether the subject has satisfied your rule's constraints
+```ts
+import { verify } from 'snarkyjs'
+
+// verify the proof with a verification key
+verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey)
+```
+</Steps>
+
+### W3C Credential Example
+As the W3C verifiable credential data model defines, these JSON objects must be flattened to use in a `MerkleMap`. We can use the `flattenObject` function in `@herald-sdk/data-model` to do this! This is what happens:
+
+![stack](../static/img/credential_conversion.png)
+
+A Herald is just an abstraction over a SnarkyJS `MerkleMap`!
+
+<Steps>
+### Create credential for subject
+Let's create a W3C example credential for a subject who has a Bachelor's Degree.
+```ts
+import { Credential } from @herald-sdk/credentials
+import { PrivateKey } from "snarkyjs";
+import { ClaimType, flattenObject, constructClaim } from "@herald-sdk/data-model";
+
+
+// generate issuer private keys
+const issuerPrvKey = PrivateKey.random();
+// Define the credential
+const credential = {
+    "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://www.w3.org/2018/credentials/examples/v1"
+    ],
+    "id": "http://example.edu/credentials/3732",
+    "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+    "issuer": "https://example.edu/issuers/565049",
+    "issuanceDate": new Date().toISOString(),
+    "credentialSubject": {
+        "id": "did:mina:B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq",
+        "degree": {
+            "type": "BachelorDegree",
+            "name": "Bachelor of Science and Arts"
+        }
+    }
+}
+
+// flatten the credential
+const flattenedCredential = flattenObject(credential);
+
+// construct a claim about the subject
+const claims = constructClaim(flattenedCredential)
+
+// construct a credential using the claim and the issuer private key
+const credential = Credential.create(claims, issuerPrvKey);
+```
+
+### Construct rule
+As a challenger you want to know if the credential a subject has is a Bachelor's Degree. We need a new `Rule` for this! Remember the credential's property is now a flattened object so the rule we create must check if the "credentialSubject.degree.type" property equals "BachelorDegree".
+
+```ts
+import { Rule } from "@herald-sdk/data-model";
+
+const property = "credentialSubject.degree.type";
+const operation = "eq";
+const value = "BachelorDegree";
+
+const rule = new Rule(property, operation, value);
+```
+
+### Prove that the Credential can satisfy this Rule.
+As the subject and credential owner, we can now make a proof using this rule.
+```ts
+const proofResponse = await credential.prove("credentialSubject.degree.type", "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv", rule, subjectPrvKey);
+```
+
+### Verify the Proof
+As a challenger, you can verify whether the subject has satisfied your rule's constraints and the user does have a Bachelor's Degree, without revealing other information like the type of degree was a Bachelor of Science and Arts.
+```ts
+import { verify } from 'snarkyjs'
+
+// verify the proof with a verification key
+verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey)
+```
 </Steps>

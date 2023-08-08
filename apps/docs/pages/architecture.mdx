@@ -1,25 +1,116 @@
 import { Callout } from 'nextra-theme-docs'
 
-# 1) First title
+# The Herald Stack
 
-## 2) Second title
+Herald is a thin wrapper around SnarkyJS. Herald currently has three layers:
+- [**@herald-sdk/data-model**](#herald-sdkdata-model) - this package provides classes and utilities for managing claims, signed claims, and other data structures relevant to Zero-Knowledge Proofs and their associated cryptographic functions.
+- [**@herald-sdk/provable-programs**](#herald-sdkprovable-programs) - this package provides a single `ZkProgram` that allows users to attest to their credentials per some `Rule` provided by a challenger.
+- [**@herald-sdk/credentials**](#herald-sdkcredentials) - this package encapsulates both `data-model` and `provable-programs` packages, allowing issuers to create credentials, subjects to attest to claims about their credentials, and verify if a credential was issued by a specific issuer and about a specific subject.
 
-## 3) Third title
+## `@herald-sdk/data-model`
 
-## 4) Fourth title
+### Modules
+
+#### `dataModel.ts`
+
+##### Class: `Claim`
+A claim is a `MerkleMap` of key-value pairs where the key is a string and the value is a `ClaimType`. It provides methods to add, get, and retrieve the Merkle root and witness for a given key.
+
+  - `addField(key: string, value: ClaimType)`: Adds a field to the claim's `MerkleMap`.
+  - `getField(key: string): Field | undefined`: Gets the Field corresponding to the provided key.
+  - `getRoot()`: Field: Returns the Merkle root of the claim's `MerkleMap`.
+  - `getWitness(key: string): MerkleMapWitness`: Retrieves the MerkleMapWitness for a given key.
 
 
-## The Herald Stack
+##### Class: `SignedClaim`
+A signed claim is a claim that has been signed by an issuer. It contains the root of the claim and the signature of the issuer.
 
-For now, let's focus on the high level overview and scrap the surface of each of these layers.
+##### Class: `CredentialPresentation`
+A structure that attests to being the owner of a credential, useful for Zero-Knowledge Proofs.
 
-![stack](../static/img/stack.png)
+##### Class: `Rule`
+A rule that can be used to infer a claim from another claim. It can be provided by a challenger to a prover to verify a property on a claim.
 
-### Creating credentials
+#### `types.ts`
 
-### Proving statements about credentials
+##### Type: `ClaimType`
+Defines the possible data types for a claim. It can be a string, number, or a PublicKey.
+
+#### `utils/construction.ts`
+Utility functions to construct various data structures.
+  - `constructClaim(claims: {[key: string]: ClaimType}): Claim`: Constructs a claim from a dictionary of claims.
+  - `constructSignedClaim(claim: Claim, issuerPrvKey: PrivateKey): SignedClaim`: Constructs a signed claim.
+  - `constructPresentation(signedClaim: SignedClaim, subjectPrvKey: PrivateKey): CredentialPresentation`: Constructs a credential presentation from a signed claim.
+
+#### `utils/conversion.ts`
+Utility functions for converting between various data structures.
+  - `stringToField(str: string): Field`: Converts a string to a Field.
+  - `numberToField(num: number): Field`: Converts a number to a Field.
+  - `publicKeyHash(publicKey: PublicKey): Field`: Hashes a PublicKey to produce a Field.
+  - `claimToField(claim: ClaimType): Field`: Converts a claim to a Field.
+  - `fieldToString(field: Field[]): string`: Converts a Field to a string.
+  - `flattenObject(obj: {[key: string]: any}, prefix = ''): {[key: string]: ClaimType}`: Flattens an object into a dictionary of claims.
+
+## Usage
+The `@herald-sdk/data-model` package allows users to create and manage claims and their associated cryptographic proofs. With utilities for constructing and converting these data structures, developers can effortlessly integrate Zero-Knowledge Proofs and cryptographic functions into their applications.
+
+## `@herald-sdk/provable-programs`
+
+### Modules
+
+#### `ChallengeProgram.ts`
+
+##### Class: `PublicInputArgs`
+This class defines the public inputs for the Zero-Knowledge Program (ZkProgram). These inputs include the public keys of the issuer and subject, as well as a rule (`provingRule`) for attesting the credentials.
+
+##### `AttestCredentials`
+This is a Zero-Knowledge Program (ZkProgram) that works to validate a claim on a credential. The current implementation works for one field on a claim. It has a single `attest` method and requires `PublicInputArgs`.
+
+  - `attest`: This method validates the legitimacy of the signed claim, the credential presentation, and the correctness of the claim value based on a provided rule. It uses the public inputs to ensure that signatures are valid and the claim is correctly attested.
 
 <Callout type="default" emoji="🧩">
-  One of the best features Herald offers thanks to being built with SnarkyJS is immediate integration with existing TypeScript applications. You can read more about it [here](https://docs.minaprotocol.com/zkapps/snarkyjs).
+Note: Future enhancements include expanding it to work for multiple fields on a claim using a rollup style methodology.
 </Callout>
 
+## `@herald-sdk/credentials`
+
+### Modules
+
+#### `credential.ts`
+
+##### Type: `proveReturnType`
+The return type for the prove method in the `Credential` class. Contains:
+  - `attestationProof`: Proof that attests to certain claims.
+  - `verificationKey`: A string that represents the key used for verification.
+
+##### Class: `Credential`
+This class represents a digital credential containing a `MerkleMap` of claims (claim), a signed version of that map (`signedClaim`), and a dictionary of claims (`credential`).
+
+###### Constructor:
+    - Parameters:
+      - `claim`: A MerkleMap representing claims.
+      - `signedClaim`: A signed version of the claim by the issuer.
+      - `credential`: A dictionary of claims.
+
+
+###### Static Method: `create`
+    Description: An Issuer can construct a `Credential` object by taking in a dictionary of claims and a private key from the issuer.
+    - Parameters:
+      - `claims`: A dictionary representing multiple claims.
+      - `issuerPrvKey`: The private key of the issuer.
+
+
+###### Method: `verify`
+    Description: Verifies the authenticity of the `Credential` object based on the given issuer and subject public keys.
+    - Parameters:
+      - `issuerPubKey`: The public key of the issuer.
+      - `subjectPubKey`: The public key of the subject (credential holder).
+
+
+###### Method: `prove`
+    Description: A subject can produces a Zero-Knowledge Proof that attests to a certain claim within the credentials per a given `Rule` from a challenger.
+    - Parameters:
+      - `claimKey`: A string representing the key of the claim to attest.
+      - `issuerPubKey`: The public key of the issuer.
+      - `rule`: The rule used to create the attestation.
+      - `subjectPrvKey`: The private key of the subject (credential holder).

@@ -1,18 +1,6 @@
 import { Field, Experimental, PublicKey, Bool, Struct, MerkleMapWitness } from 'snarkyjs';
 import { CredentialPresentation, Rule, SignedClaim, stringToField } from '@herald-sdk/data-model';
 
-// WIP 🚧
-/*class PrivateInputArgs extends Struct({
-  claim: MerkleMapWitness,
-  claimValue: Field,
-  signedClaim: SignedClaim,
-  credentialPresentation: CredentialPresentation
-}) {
-  constructor(claim: MerkleMapWitness, claimValue: Field, signedClaim: SignedClaim, credentialPresentation: CredentialPresentation) {
-    super({claim, claimValue, signedClaim, credentialPresentation});
-  }
-}*/
-
 export class PublicInputArgs extends Struct({
   issuerPubKey: PublicKey,
   subjectPubKey: PublicKey,
