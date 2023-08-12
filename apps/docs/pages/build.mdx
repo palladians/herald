@@ -74,10 +74,10 @@ const proofResponse = await credential.prove("age", challenge, subjectPrvKey, zk
 As a challenger, you can verify whether the subject has satisfied your rule's constraints
 ```ts
 import { verify } from 'snarkyjs'
-import { ZkProgramDetails } from '@herald-sdk/provable-programs'
+import { ZkProgramsDetails } from '@herald-sdk/provable-programs'
 
 // get verification key
-const verificationKey = ZkProgramDetails["AttestSingleCredentialProperty"].verificationKey
+const verificationKey = ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey
 
 // verify the proof with a verification key
 verify(proofResponse.toJSON(), verificationKey)
@@ -161,10 +161,10 @@ const proofResponse = await credential.prove("credentialSubject.degree.type", ch
 As a challenger, you can verify whether the subject has satisfied your rule's constraints and the user does have a Bachelor's Degree, without revealing other information like the type of degree was a Bachelor of Science and Arts.
 ```ts
 import { verify } from 'snarkyjs'
-import { ZkProgramDetails } from '@herald-sdk/provable-programs'
+import { ZkProgramsDetails } from '@herald-sdk/provable-programs'
 
 // get verification key
-const verificationKey = ZkProgramDetails["AttestSingleCredentialProperty"].verificationKey
+const verificationKey = ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey
 
 // verify the proof with a verification key
 verify(proofResponse.toJSON(), verificationKey)
