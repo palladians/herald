@@ -1,20 +1,11 @@
-import { Field, Experimental, PublicKey, Bool, Struct, MerkleMapWitness } from 'snarkyjs';
-import { CredentialPresentation, Rule, SignedClaim, stringToField } from '@herald-sdk/data-model';
-
-export class PublicInputArgs extends Struct({
-  issuerPubKey: PublicKey,
-  subjectPubKey: PublicKey,
-  provingRule: Rule
-}) {
-  constructor(issuerPubKey: PublicKey, subjectPubKey: PublicKey, provingRule: Rule) {
-    super({issuerPubKey, subjectPubKey, provingRule});
-  }
-}
+import { Field, Experimental, Bool, MerkleMapWitness } from 'snarkyjs';
+import { CredentialPresentation, SignedClaim, stringToField } from '@herald-sdk/data-model';
+import { PublicInputArgs } from './utils/types';
 
 // NOTE: This ZkProgram only works for one field on a claim
-// TODO: make this work for multiple fields on a claim - use a merge function that takes 
+// TODO: add more ZkPrograms that work for multiple fields on a claim - use a merge function that takes 
 // a proof as an input and proves something else about another field on the claim recursively -- rollup style
-export const AttestCredentials = Experimental.ZkProgram({
+export const AttestSingleCredentialProperty = Experimental.ZkProgram({
   publicInput: PublicInputArgs,
 
   methods: {
@@ -64,4 +55,4 @@ export const AttestCredentials = Experimental.ZkProgram({
   },
 });
 
-export class AttestationProof extends Experimental.ZkProgram.Proof(AttestCredentials){};
+export class AttestationProof extends Experimental.ZkProgram.Proof(AttestSingleCredentialProperty){};

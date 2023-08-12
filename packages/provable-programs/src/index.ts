@@ -1,1 +1,2 @@
-export * from './ChallengeProgram'
+export * from './AttestSingleCredentialProperty'
+export * from './utils'

@@ -37,7 +37,7 @@ const credential = Credential.create(claims, issuerPrvKey);
 ```
 
 ### Create a challenge
-As a challenger, you want the subject to prove they meet some requirements like whether the subject is older than 18 and that a specific issuer has made this claim about the subject.
+As a challenger, you want the subject to prove they meet some requirements like whether the subject is older than 18 and that a specific issuer has made this claim about the subject. Importantly, a challenger can also define a specific ZkProgram from `@herald-sdk/provable-programs` to further constrain the prover to an expected verification key.
 ```ts
 import { Rule } from "@herald-sdk/data-model";
 import { PublicInputArgs } from "@herald-sdk/provable-programs"
@@ -55,6 +55,7 @@ const rule = new Rule(property, operation, value);
 const issuerPubKey = "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv";
 const subjectPubKey = "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq";
 const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
+const zkProgram = "AttestSingleCredentialProperty";
 ```
 
 Once the challenge has been created by the challenger, then they must give it to the prover, their interaction looks similar to the following diagram:
@@ -66,16 +67,20 @@ Once the challenge has been created by the challenger, then they must give it to
 As a holder of a `Credential`, a subject can prove properties about their credentials given constraints. Note: the issuer public key needs to be assigned in the `Rule` (this is a TODO).
 ```ts
 // given a rule and an expected issuer a holder of a `Credential` can `prove` properties of their credential
-const proofResponse = await credential.prove("age", challenge, subjectPrvKey);
+const proofResponse = await credential.prove("age", challenge, subjectPrvKey, zkProgram);
 ```
 
 ### Verify the Proof
 As a challenger, you can verify whether the subject has satisfied your rule's constraints
 ```ts
 import { verify } from 'snarkyjs'
+import { ZkProgramDetails } from '@herald-sdk/provable-programs'
+
+// get verification key
+const verificationKey = ZkProgramDetails["AttestSingleCredentialProperty"].verificationKey
 
 // verify the proof with a verification key
-verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey)
+verify(proofResponse.toJSON(), verificationKey)
 ```
 </Steps>
 
@@ -143,20 +148,25 @@ const rule = new Rule(property, operation, value);
 const issuerPubKey = "B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv";
 const subjectPubKey = "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq";
 const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
+const zkProgram = "AttestSingleCredentialProperty";
 ```
 
 ### Prove that the Credential can satisfy this Rule.
 As the subject and credential owner, we can now make a proof using this challenge.
 ```ts
-const proofResponse = await credential.prove("credentialSubject.degree.type", challenge, subjectPrvKey);
+const proofResponse = await credential.prove("credentialSubject.degree.type", challenge, subjectPrvKey, zkProgram);
 ```
 
 ### Verify the Proof
 As a challenger, you can verify whether the subject has satisfied your rule's constraints and the user does have a Bachelor's Degree, without revealing other information like the type of degree was a Bachelor of Science and Arts.
 ```ts
 import { verify } from 'snarkyjs'
+import { ZkProgramDetails } from '@herald-sdk/provable-programs'
+
+// get verification key
+const verificationKey = ZkProgramDetails["AttestSingleCredentialProperty"].verificationKey
 
 // verify the proof with a verification key
-verify(proofResponse.attestationProof.toJSON(), proofResponse.verificationKey)
+verify(proofResponse.toJSON(), verificationKey)
 ```
 </Steps>

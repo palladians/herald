@@ -1,19 +1,8 @@
-# Herald Docs
+# Herald Docs 🪽
 
 Documentation for Herald, a credential creation, issuance, and zk-SNARK proving library.
 
-## Emojis
-- Herald 📢 (Loudspeaker)
-- Herald 📜 (Scroll)
-- Herald 🎺 (Trumpet)
-- Herald 🗣️ (Speaking Head)
-- Herald 💼 (Briefcase)
-- Herald 📣 (Megaphone)
-- Herald 🏰 (Castle, symbolizing the proclamation from a royal authority)
-- Herald ✉️ (Envelope, symbolizing a message)
-- Herald 💌 (Love Letter, symbolizing a special message)
-- Herald 🕊️ (Dove, often used as a messenger)
-
+This documentation is built with NextJS.
 
 ## Local Development
 

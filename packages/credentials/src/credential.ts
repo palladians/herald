@@ -1,11 +1,6 @@
 import { Poseidon, PrivateKey, Proof, PublicKey } from "snarkyjs";
 import { Claim, ClaimType, CredentialPresentation, SignedClaim, constructClaim, constructSignedClaim } from "@herald-sdk/data-model";
-import {AttestCredentials, PublicInputArgs} from "@herald-sdk/provable-programs";
-
-export type proveReturnType = {
-    attestationProof: Proof<PublicInputArgs, void>,
-    verificationKey: string,
-}
+import { PublicInputArgs, ZkProgramsDetails } from "@herald-sdk/provable-programs";
 
 export class Credential {
     public claim: Claim; // A MerkleMap
@@ -42,23 +37,29 @@ export class Credential {
         return true;
     }
 
-    // TODO: make an arbitrary proof about the credentials (e.g. that the subject is over 18)
     // should take arguments that include those from a challenge object provided to the owner of the credentials
     // A challenge can include asserting e.g. the claim "age" is greater than 18, the claim is signed by an expected issuer, etc.
     // this should be a ZkProgram & must include the signature of the subject
-    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey): Promise<proveReturnType> {
+    // TODO: provide the verification key as an argument to the function, so that the prover knows which
+    // ZkProgram the challenger/verifier expects. This is necessary to constrain the prover to a specific ZkProgram.
+    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey, ZkProgram: string): Promise<Proof<PublicInputArgs, void>> {
         const claimWitness = this.claim.getWitness(claimKey);
         const claimValue = this.claim.getField(claimKey);
+        
         if (!claimValue) {
             throw new Error("Claim key not found");
         }
+        
+        const programDetails = ZkProgramsDetails[ZkProgram];
+        if (!programDetails) {
+            throw new Error("ZkProgram not found");
+        }
+
         const credentialPresentation = new CredentialPresentation(this.signedClaim, subjectPrvKey);
-        console.log("compiling...")
-        const { verificationKey } = await AttestCredentials.compile();
-        console.log("compiling complete")
-        console.log("proving...")
-        const proof = await AttestCredentials.attest(challenge, claimWitness, claimValue, this.signedClaim, credentialPresentation);
-        console.log("proving complete")
-        return { attestationProof: proof, verificationKey: verificationKey };
+    
+        console.log("proving...");
+        const proof = await programDetails.attest(challenge, claimWitness, claimValue, this.signedClaim, credentialPresentation);
+        console.log("proving complete");
+        return proof.attestationProof;
     }
 }
