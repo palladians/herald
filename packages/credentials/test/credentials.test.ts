@@ -2,7 +2,7 @@ import { PrivateKey, verify } from "snarkyjs";
 import { ClaimType, Rule } from "@herald-sdk/data-model";
 import { Credential } from "../src"; 
 import { describe, it } from '@jest/globals';
-import { PublicInputArgs, ZkProgramDetails } from "@herald-sdk/provable-programs";
+import { PublicInputArgs, ZkProgramsDetails } from "@herald-sdk/provable-programs";
 
 describe('Credential', () => {
     it('can construct a credential', () => {
@@ -81,7 +81,7 @@ describe('Credential', () => {
         const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
         
         const proofResponse = await credential.prove("age", challenge, subjectPrvKey, "AttestSingleCredentialProperty");
-        console.log("attestationProof Verification: ", await verify(proofResponse.toJSON(), ZkProgramDetails["AttestSingleCredentialProperty"].verificationKey));
-        expect(verify(proofResponse.toJSON(), ZkProgramDetails["AttestSingleCredentialProperty"].verificationKey)).toBeTruthy();
+        console.log("attestationProof Verification: ", await verify(proofResponse.toJSON(), ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey));
+        expect(verify(proofResponse.toJSON(), ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey)).toBeTruthy();
     });
 });

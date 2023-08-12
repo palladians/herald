@@ -27,7 +27,7 @@ export type AttestMethodType = (
 // Define the ZkProgramDetails structure
 // TODO: rename as we already have ZkProgramsDetails
 export type ZkProgramDetails = {
-    key: string;
+    verificationKey: string;
     compile: () => Promise<{ verificationKey: string }>; 
     attest: AttestMethodType;
 };
