@@ -56,7 +56,11 @@ export class Credential {
         }
 
         const credentialPresentation = new CredentialPresentation(this.signedClaim, subjectPrvKey);
-    
+        
+        console.log("compiling...");
+        await programDetails.compile();
+        console.log("compiling complete");
+
         console.log("proving...");
         const proof = await programDetails.attest(challenge, claimWitness, claimValue, this.signedClaim, credentialPresentation);
         console.log("proving complete");
