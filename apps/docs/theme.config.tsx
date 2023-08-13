@@ -15,7 +15,7 @@ const config: DocsThemeConfig = {
 	docsRepositoryBase: "https://github.com/palladians/herald/tree/main/apps/docs",
 	footer: {
 		text: (
-			<span>MIT {new Date().getFullYear()} © Herald - Credential Creation & Proving</span>
+			<span>Apache 2.0 {new Date().getFullYear()} © Herald - Credential Creation & Proving</span>
 		),
 	},
 	editLink: {

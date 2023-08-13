@@ -115,7 +115,7 @@ Herald thrives with the combined magic of our community wizards. We welcome cont
 
 ## 📖 License
 
-This project is licensed under the **MIT license**.
+This project is licensed under the **Apache 2.0 license**.
 
 See [LICENSE](LICENSE) for more information.
 

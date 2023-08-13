@@ -9,7 +9,7 @@
     "export": "next build && next export"
   },
   "author": "Teddy Pender <email@email.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/palladians/herald/issues"
   },
