@@ -13,11 +13,29 @@ export class Credential {
         this.credential = credential;
     }
     // TODO: change `create` to `issue`
-    public static create(claims: {[key: string]: ClaimType}, issuerPrvKey: PrivateKey): Credential {
+    public static create(claims: {[key: string]: ClaimType}, issuerPrvKey: PrivateKey | string): Credential {
+        if (typeof issuerPrvKey === "string") {
+            issuerPrvKey = PrivateKey.fromBase58(issuerPrvKey);
+        }
         // constructs a Claim (MerkleMap) from a dictionary of claims
         const claim = constructClaim(claims);
         // construct a signed claim from a claim and a private key
         const signedClaim = constructSignedClaim(claim, issuerPrvKey);
+        return new Credential(claim, signedClaim, claims);
+    }
+
+    /**
+     * 
+     * @param claims a JSON object of claims
+     * @param signedClaim the issuer's signature of the claim
+     * @returns a new Credential object
+     * 
+     * @remarks the claims argument should be a flattened JSON object of claims (i.e. no nested objects). Use the `flattenObject` function from `@herald-sdk/data-model` to flatten a JSON object.
+     * @remarks the signedClaim argument should be a SignedClaim Struct, subjects can simply use `const signedClaim = new SignedClaim(undefined, undefined, signedClaimJson);`
+     */
+    public static recreate(claims: {[key: string]: ClaimType}, signedClaim: SignedClaim): Credential {
+        // constructs a Claim (MerkleMap) from a dictionary of claims
+        const claim = constructClaim(claims);
         return new Credential(claim, signedClaim, claims);
     }
 

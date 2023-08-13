@@ -170,3 +170,49 @@ const verificationKey = ZkProgramsDetails["AttestSingleCredentialProperty"].veri
 verify(proofResponse.toJSON(), verificationKey)
 ```
 </Steps>
+
+### CLI Credential Creation Example
+
+Herald's CLI credential issuance interface provides a seamless and convenient way for Issuers to generate verifiable credentials for subjects using Herald. The following documentation walks you through an example of using this interface.
+
+```bash
+pnpm run cli create --claims <CLAIMS_JSON> --issuerPrvKey <ISSUER_PRIVATE_KEY> --save <DIRECTORY_PATH>
+```
+
+- `<CLAIMS_JSON>`: This is a stringified JSON of your claims. Use `JSON.stringify(claims)` in your script to convert the claims object to a string.
+- `<ISSUER_PRIVATE_KEY>`: The base58-encoded issuer's private key.
+- `<DIRECTORY_PATH>`: Optional. The directory path where you want to save the generated artifacts. If not provided, it defaults to `./artifacts`.
+
+In practice, if an Issuer is creating credentials for a subject they claim to have a university degree, executing the command might look something like this:
+
+```bash
+pnpm run cli create --claims '{"@context":["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],...}' --issuerPrvKey EKE1nNTCEikFG6pn1NxqqN1TNjQXNrSZmMj6YSC9TefD7bJbGL15 --save ./artifacts/B62qk.../UniversityDegree
+```
+
+The directory path to save the artifacts can be customized to the Issuers' desired structure. The artifacts should be then given to the subject, or stored in a registry (e.g. a Data-Availability layer, smart contract, persistent store, etc.), the artifacts include:
+- `signedClaim.json` (the issuer's signature of the MerkleMap root)
+- `credential.json` (the JSON credential)
+- `flatCredential.json` (the flatten credential required by subjects to reconstruct their Herald credential)  
+
+### Recreating a Credential
+
+If a subject has been issued credentials by an issuer, they can use Herlad to reconstruct their Herald Credential.
+
+```ts
+import { Credential } from @herald-sdk/credentials
+
+// import the signed claim json object
+const signedClaimJson = {
+        "claimRoot": "17432993283620653071265435513179338119184224288853623637901748948712012685273",
+        "signatureIssuer": {
+          "r": "21180312343368474591313734714969702118628675012610691774369339245240369832750",
+          "s": "22433867616914427848102713952217876822077837855966763038377768324812887427287"
+        }
+      };
+
+// reconstruct the SignedClaim Struct
+const signedClaim = new SignedClaim(undefined, undefined, signedClaimJson);
+
+// construct a credential using the claim and the issuer private key
+const credential = Credential.recreate(claims, signedClaim);
+```

@@ -41,10 +41,24 @@ export class SignedClaim extends Struct({
   claimRoot: Field,
   signatureIssuer: Signature
 }) {
-  constructor(claim: Claim, issuerPrvKey: PrivateKey) {
-    const root = claim.getRoot();
-    const signatureIssuer = Signature.create(issuerPrvKey, [root]);
-    super({claimRoot: root, signatureIssuer});
+  constructor(claim?: Claim, issuerPrvKey?: PrivateKey, json?: any) {
+    if (json) {
+      const claimRoot = Field.fromJSON(json.claimRoot);
+      const signatureIssuer = Signature.fromJSON(json.signatureIssuer);
+      super({claimRoot, signatureIssuer});
+    } else if (claim && issuerPrvKey) {
+      const root = claim.getRoot();
+      const signatureIssuer = Signature.create(issuerPrvKey, [root]);
+      super({claimRoot: root, signatureIssuer});
+    } else {
+      throw new Error('Either provide json or both claim and issuerPrvKey to construct SignedClaim.');
+    }
+  }
+  toJSON() {
+    return {
+      claimRoot: this.claimRoot.toJSON(),
+      signatureIssuer: this.signatureIssuer.toJSON(),
+    };
   }
 }
 

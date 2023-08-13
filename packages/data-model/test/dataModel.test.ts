@@ -4,6 +4,7 @@ import { claimToField, stringToField } from "../src/utils/conversion";
 import { verifyPresentation } from "../src/utils/verification";
 import { createMockCredential } from "../src/utils/testCredentialUtil";
 import { describe, it } from '@jest/globals';
+import { SignedClaim } from "../src/dataModel";
 
 describe('Claims and SignedClaims', () => {
     it('can construct a claim', () => {
@@ -15,6 +16,18 @@ describe('Claims and SignedClaims', () => {
       expect(claim.getField("over18")?.equals(stringToField("true")).toBoolean()).toBe(true);
       expect(claim.getField("kyc")?.equals(stringToField("passed")).toBoolean()).toBe(true);
       expect(claim.getField("subject")?.equals(Poseidon.hash(subjectPublicKey.toFields())).toBoolean()).toBe(true);
+    });
+    it('can construct a signed claim from json', () => {
+      const signedClaimJson = {
+        "claimRoot": "17432993283620653071265435513179338119184224288853623637901748948712012685273",
+        "signatureIssuer": {
+          "r": "21180312343368474591313734714969702118628675012610691774369339245240369832750",
+          "s": "22433867616914427848102713952217876822077837855966763038377768324812887427287"
+        }
+      };
+      const signedClaim = new SignedClaim(undefined, undefined, signedClaimJson);
+      expect(signedClaim).toBeTruthy();
+      expect(signedClaim.claimRoot.equals(Field.fromJSON(signedClaimJson.claimRoot)).toBoolean()).toBe(true);
     });
     it('can construct a (nested) claim that follows a schema to be used in a Claim (MerkleMap)', () => {
         const subjectPrvKey = PrivateKey.random();
