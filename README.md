@@ -1,81 +1,111 @@
-# Turborepo starter
+<!-- markdownlint-disable -->
+<div align="center">
+  <img src="apps/docs/static/img/herald.png" height="128">
+</div>
+<div align="center">
+  <img src="apps/docs/static/img/Herald-name.png" height="128">
+</div>
+<div align="center">
+<br />
+<!-- markdownlint-restore -->
 
-This is an official starter Turborepo.
+[![Project license](https://img.shields.io/github/license/palladians/palladians.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/palladians/herald/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+<a href="https://twitter.com/palladians_xyz">
+<img src="https://img.shields.io/twitter/follow/palladians_xyz?style=social"/>
+</a> <a href="https://github.com/palladians/herald">
+<img src="https://img.shields.io/github/stars/palladians/herald?style=social"/>
+</a> <a href="https://palladians.github.io/herald/">
+<img src="https://img.shields.io/badge/Documentation-Website-yellow"/> </a>
 
-## Using this example
+<a href="https://palladians.github.io/herald/contribute">
+<img src="https://img.shields.io/badge/Contributor%20starter%20pack-Doc-green?logo=github"/>
+</a>
 
-Run the following command:
+<a href="https://www.npmjs.com/package/herald-sdk">
+<img src="https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white"/>
+</a>
 
-```sh
-npx create-turbo@latest
-```
+<a href="https://https://palladians.github.io/herald/benchmarks">
+<img src="https://img.shields.io/badge/Benchmark-Performance-blue?logo=github-actions"/>
+</a>
+</div>
 
-## What's inside?
+# 🪽 Herald: SnarkyJS Credential Creation, Issuance & Proving Framework
 
-This Turborepo includes the following packages/apps:
+Welcome to **Herald**! A [SnarkyJS](https://docs.minaprotocol.com/zkapps/snarkyjs) credential creation, 
+Crafting, issuing, and proving digital heralds has never been this enchanting.
 
-### Apps and Packages
+Harnessing the might of SnarkyJS, and fortified by Kimchi, Herald empowers you to seamlessly create 
+and manage credentials, delivering unparalleled performance in the realm of Mina's 
+zk-SNARK world. 🪶
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+Embark on a journey into verifiable credentials and client-side proving. Join our passionate 
+community of contributors! Together, we're pioneering the future of credentials not just within the 
+Mina ecosystem, but throughout Web3.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+🧙‍♂️ Unleash the spellbinding capabilities of Herald, your ultimate toolkit for establishing a fortified 
+fortress around digital identity. Embrace the power of SnarkyJS and witness the metamorphosis of the 
+credential ecosystem. Let Herald be the wizard's hat to your magical adventure.
 
-### Utilities
+## 🌌 Features
+- Craft, Issue, and Prove Credentials 🎓
+- Built upon the power of SnarkyJS 🧙‍♂️
+- Effortless integration with the Mina ecosystem 🌍
+- Comprehensive documentation 📖
+- Active development and an engaged community 🌟
 
-This Turborepo has some additional tools already setup for you:
+## 📚 Documentation
+Navigate through our extensive documentation which covers all facets of Herald:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- [Introduction](https://palladians.github.io/herald/introduction)
+- [Architecture Overview](https://palladians.github.io/herald/architecture)
+- [Getting Started Guide](https://palladians.github.io/herald/build)
+- [Credential Creation and Issuance](https://palladians.github.io/herald/build#create-credential-for-subject)
+- [Credential Creation and Issuance - CLI](https://palladians.github.io/herald/build#cli-credential-creation-example)
+- [Challenges for Credential Owners](https://palladians.github.io/herald/build#construct-challenge)
+- [Proving Credentials](https://palladians.github.io/herald/build#prove-that-the-credential-can-satisfy-this-rule)
+- [Verifying Proofs](https://palladians.github.io/herald/build#verify-the-proof-1)
 
-### Build
+## Benchmarking
+Benchmarking is vital in understanding the performance and efficiency of Herald throughout its lifecycle. It gives insights into how efficiently Herald generates and verifies zk-SNARK proofs, crucial for achieving swift, responsive applications.
 
-To build all apps and packages, run the following command:
+The benchmark tests are conducted on a Linux-based virtual machine with the following specifications:
 
-```
-cd my-turborepo
-pnpm build
-```
+- CPU: An 8-core CPU, perfect for tasks requiring multi-threading.
+- Memory: 32 GB RAM to cater to high-memory demands.
+- Storage: 300 GB SSD for fast data access.
+- OS: The system runs on Ubuntu 22.04, the latest version as of 2022.
 
-### Develop
+### Proving Time Benchmarks
+Proving Time is a measure of how long it takes to generate a zk-SNARK proof. In Herald, it indicates the speed at which a client can produce a proof for a given rule provided by a challenger. A practical example would be the time it takes for someone to prove they're above 18 using a credential issued by a specific authority.
 
-To develop all apps and packages, run the following command:
+Swift proving times are pivotal, especially for apps depending on frequent or time-sensitive zk-SNARK proofs. However, proving time can be influenced by numerous factors like computational resources, circuit sizes, and computation complexity. It's essential to understand that different users might have varying efficiency needs. While a sequencer might not require rapid proving times, a wallet aiming for a seamless user experience would.
 
-```
-cd my-turborepo
-pnpm dev
-```
+### Verification Time Benchmarks
+Verification Time represents the time needed to verify a zk-SNARK proof. It's all about how swiftly a challenger can authenticate proofs given by a subject.
 
-### Remote Caching
+Fast verification times are the backbone of zk-SNARK reliant systems. They guarantee quick confirmations, fostering real-time responsiveness in applications. Ideally, zk-SNARK verification should be 🔥 blazing 🔥 fast!
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Proof Size Benchmarks
+Proof Size denotes the storage space occupied by a zk-SNARK proof. This benchmark evaluates Herald's prowess in producing compact proofs - a trait zk-SNARKs are inherently known for! 🔎
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+Proof size is a critical factor, especially considering storage and transmission. Concise proofs lead to reduced storage demands and swifter transmission, crafting more scalable and efficient apps and interactions.
 
-```
-cd my-turborepo
-npx turbo login
-```
+To stay updated with Herald's benchmarking progress and insights, visit our [**Benchmark Page**](https://palladians.github.io/herald/benchmarks).
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## 🤝 Contribute
+Herald thrives with the combined magic of our community wizards. We welcome contributors with open arms. For more details, check out our contributing guide.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## 📖 License
 
-```
-npx turbo link
-```
+This project is licensed under the **MIT license**.
 
-## Useful Links
+See [LICENSE](LICENSE) for more information.
 
-Learn more about the power of Turborepo:
+Happy building! ❤️ 
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+## Contributors ✨
+
+Thanks goes to these wonderful people
+([emoji key](https://allcontributors.org/docs/en/emoji-key)):
