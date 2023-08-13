@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 <div align="center">
-  <img src="apps/docs/static/img/herald.png" height="128">
+  <img src="apps/docs/static/img/herald.png" height="256">
 </div>
 <div align="center">
   <img src="apps/docs/static/img/Herald-name.png" height="128">
@@ -23,7 +23,7 @@
 </a>
 
 <a href="https://www.npmjs.com/package/herald-sdk">
-<img src="https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white"/>
+<img src="https://img.shields.io/badge/NPM-Herald%20SDK-CB3837?style=for-the-badge&logo=npm&logoColor=white"/>
 </a>
 
 <a href="https://https://palladians.github.io/herald/benchmarks">
@@ -47,6 +47,12 @@ Mina ecosystem, but throughout Web3.
 🧙‍♂️ Unleash the spellbinding capabilities of Herald, your ultimate toolkit for establishing a fortified 
 fortress around digital identity. Embrace the power of SnarkyJS and witness the metamorphosis of the 
 credential ecosystem. Let Herald be the wizard's hat to your magical adventure.
+
+Herald seeks to be compatible with the data model outlined by W3C's [**Verifiable Credential Data Model**](https://www.w3.org/TR/vc-data-model/).
+It does so by mapping JSON credential objects to SnarkyJS MerkleMaps. The issuer signs the MerkleMap's root, 
+with that signature a subject can prove arbitrary properties of their credentials privately using ZkPrograms. 
+The resulting proof can then be used for many things, including in smart contracts and other SnarkyJS recursive
+programs! The possible use-cases are not limited ⚡
 
 ## 🌌 Features
 - Craft, Issue, and Prove Credentials 🎓
@@ -93,6 +99,13 @@ Proof Size denotes the storage space occupied by a zk-SNARK proof. This benchmar
 Proof size is a critical factor, especially considering storage and transmission. Concise proofs lead to reduced storage demands and swifter transmission, crafting more scalable and efficient apps and interactions.
 
 To stay updated with Herald's benchmarking progress and insights, visit our [**Benchmark Page**](https://palladians.github.io/herald/benchmarks).
+
+### Run Benchmarks Yourself 🚀
+
+To run the benchmarks yourself, from the root:
+```bash
+pnpm i && pnpm build && pnpm run benchmark
+```
 
 ## 🤝 Contribute
 Herald thrives with the combined magic of our community wizards. We welcome contributors with open arms. For more details, check out our contributing guide.
