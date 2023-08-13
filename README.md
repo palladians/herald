@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <div align="center">
   <img src="apps/docs/static/img/herald.png" height="256">
@@ -131,6 +131,7 @@ Thanks goes to these wonderful people
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/teddyjfpender"><img src="https://avatars.githubusercontent.com/u/92999717?v=4?s=100" width="100px;" alt="Teddy Pender"/><br /><sub><b>Teddy Pender</b></sub></a><br /><a href="https://github.com/palladians/herald/commits?author=teddyjfpender" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://bento.me/mrcnk"><img src="https://avatars.githubusercontent.com/u/16132011?v=4?s=100" width="100px;" alt="Tomek Marciniak"/><br /><sub><b>Tomek Marciniak</b></sub></a><br /><a href="https://github.com/palladians/herald/commits?author=mrcnk" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
