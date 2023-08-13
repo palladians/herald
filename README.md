@@ -123,7 +123,7 @@ Happy building! ❤️
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -140,4 +140,3 @@ Thanks goes to these wonderful people
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-([emoji key](https://allcontributors.org/docs/en/emoji-key)):
