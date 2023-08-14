@@ -9,5 +9,6 @@ export const ZkProgramsDetails: ZkPDetails = {
             return { attestationProof: proof };
         },
         compile: AttestSingleCredentialProperty.compile
+        // TODO: add cache for compiled program artifacts
     }
 }
