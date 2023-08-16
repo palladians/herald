@@ -30,7 +30,7 @@ describe('Credential CLI', () => {
 
     it('should create a new credential', async () => {
         // Execute the CLI command
-        const result = await execa('pnpm', ['run', 'cli', 'create', '--claims', JSON.stringify(claims), '--issuerPrvKey', issuerPrvKeyBase58, '--save', './artifacts']);
+        const result = await execa('pnpm', ['run', 'cli', 'create', '--claims', JSON.stringify(claims), '--issuerPrvKey', issuerPrvKeyBase58, '--save', './test/test_artifacts']);
 
         // Assert that the command executed successfully (non-zero exit code indicates failure)
         expect(result.exitCode).toBe(0);

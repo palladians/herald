@@ -3,6 +3,8 @@ import { ClaimType, Rule } from "@herald-sdk/data-model";
 import { Credential } from "../src"; 
 import { describe, it } from '@jest/globals';
 import { PublicInputArgs, ZkProgramsDetails } from "@herald-sdk/provable-programs";
+import fs from 'fs';
+import path from 'path';
 
 describe('Credential', () => {
     it('can construct a credential', () => {
@@ -61,33 +63,38 @@ describe('Credential', () => {
         expect(isValid).toBe(true);
     });
     it('can prove a claim', async () => {
+      /**
+       * Issuer must make a claim about a subject AND prove the claim
+       */
         const subjectPrvKey = PrivateKey.random();
         const issuerPrvKey = PrivateKey.random();
+        const issuerPubKey = issuerPrvKey.toPublicKey();
+        const subjectPubKey = subjectPrvKey.toPublicKey();
         const claims: {[key: string]: ClaimType} = {
-            age: 21,
-            subject: subjectPrvKey.toPublicKey()
+            over18: "true",
+            kyc: "passed",
+            subject: subjectPubKey,
+            issuerPubKey: issuerPubKey
         };
         // issue credentials to subject
         const credential = Credential.create(claims, issuerPrvKey);
         // create rule to prove
-        const property = "age";
-        const operation = "gte";
-        const value = 18;
+        const property = "kyc";
+        const operation = "eq";
+        const value = "passed";
         const rule = new Rule(property, operation, value);
         console.log("rule: ", rule);
-        // create challenge
-        const issuerPubKey = issuerPrvKey.toPublicKey();
-        const subjectPubKey = subjectPrvKey.toPublicKey();
-        const challenge: PublicInputArgs = {issuerPubKey, subjectPubKey, provingRule: rule};
+        // create challenge - this challenge must be signed by the issuer
+        const challenge: PublicInputArgs = {issuerPubKey: issuerPubKey, subjectPubKey: issuerPubKey, provingRule: rule};
 
         const zkPrgDetails = ZkProgramsDetails["AttestSingleCredentialProperty"];
         if (!zkPrgDetails) {
             throw new Error("ZkProgram not found");
         }
-        
-        const proofResponse = await credential.prove("age", challenge, subjectPrvKey, "AttestSingleCredentialProperty");
+        // issuer must sign the proof themselves
+        const proofResponse = await credential.prove("age", challenge, issuerPrvKey, "AttestSingleCredentialProperty");
         console.log("attestationProof Verification: ", await verify(proofResponse.toJSON(), zkPrgDetails.verificationKey));
-        //fs.writeFileSync(path.join('./test/test_proofs', 'attestationProof.json'), JSON.stringify(attestationProof, null, 2));
+        fs.writeFileSync(path.join('./test/test_proofs', 'attestationProof.json'), JSON.stringify(proofResponse, null, 2));
         expect(verify(proofResponse.toJSON(), zkPrgDetails.verificationKey)).toBeTruthy();
     });
 });

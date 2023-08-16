@@ -86,7 +86,10 @@ export class Rule extends Struct({
   operation: Field, // lt, lte, eq, gte, gt
   value: Field, // the value to compare the field to
 }) {
-  constructor(field: string, operation: string, value: number) {
-    super({field: stringToField(field), operation: stringToField(operation), value: numberToField(value)});
+  constructor(field: string, operation: string, value: number | string | Field) {
+    if (typeof value === "string") {
+      value = stringToField(value);
+    super({field: stringToField(field), operation: stringToField(operation), value: typeof value === "number" ? numberToField(value) : value});
+    }
   }
 }
