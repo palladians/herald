@@ -29,8 +29,8 @@ export class PublicInputIssuerArgs extends Struct({
     issuerPubKey: PublicKey,
     provingRule: Rule
 }) {
-    constructor(issuerPubKey: PublicKey, subjectPubKey: PublicKey, provingRule: Rule) {
-        super({ issuerPubKey, subjectPubKey, provingRule });
+    constructor(issuerPubKey: PublicKey, provingRule: Rule) {
+        super({ issuerPubKey, provingRule });
     }
 }
 
