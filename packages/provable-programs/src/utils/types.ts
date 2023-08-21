@@ -1,6 +1,13 @@
 import { Field, PublicKey, Struct, MerkleMapWitness, Proof } from 'snarkyjs';
 import { Rule, CredentialPresentation, SignedClaim } from '@herald-sdk/data-model';
 
+/**
+ * A set of public input arguments for 
+ * AttestSingleCredentialProperty
+ * 
+ * @remark this does not prioritize privacy 
+ * since the subject is defined in the Struct
+ */
 export class PublicInputArgs extends Struct({
     issuerPubKey: PublicKey,
     subjectPubKey: PublicKey,
@@ -10,6 +17,23 @@ export class PublicInputArgs extends Struct({
         super({ issuerPubKey, subjectPubKey, provingRule });
     }
 }
+
+/**
+ * A set of public input arguments for 
+ * AttestSingleCredentialProperty
+ * 
+ * @remark this does not prioritize privacy 
+ * since the subject is defined in the Struct
+ */
+export class PublicInputIssuerArgs extends Struct({
+    issuerPubKey: PublicKey,
+    provingRule: Rule
+}) {
+    constructor(issuerPubKey: PublicKey, subjectPubKey: PublicKey, provingRule: Rule) {
+        super({ issuerPubKey, subjectPubKey, provingRule });
+    }
+}
+
 
 export type proveReturnType = {
     attestationProof: Proof<PublicInputArgs, void>,
