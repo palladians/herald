@@ -18,7 +18,7 @@ describe('Credential Benchmark', () => {
             subject: subjectPrvKey.toPublicKey()
         };
         // todo: change to a W3C credential 
-        const credential = Credential.create(claims, issuerPrvKey);
+        const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
         const property = "age";
         const operation = "gte";
         const value = 18;
@@ -39,19 +39,19 @@ describe('Credential Benchmark', () => {
         provingTimeBenchmarkData.push({name: `${dateString}`, duration: durationSeconds});
         fs.writeFileSync('./apps/docs/public/benchmarks/credential-proving.json', JSON.stringify(provingTimeBenchmarkData));
         // add proof size to benchmark data
-        const jsonString = JSON.stringify(proofResponse.toJSON());
+        const jsonString = JSON.stringify(proofResponse.proof.toJSON());
         const sizeInBytes = new Blob([jsonString]).size;
         const sizeInKB = sizeInBytes / 1024;
         proofSizeBenchmarkData.push({name: `${dateString}`, size: sizeInKB});
         fs.writeFileSync('./apps/docs/public/benchmarks/proof-size.json', JSON.stringify(proofSizeBenchmarkData));
         // add verification time to benchmark data
         const startTime2 = Date.now();
-        await verify(proofResponse.toJSON(), ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey);
+        await verify(proofResponse.proof.toJSON(), ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey);
         const duration2 = Date.now() - startTime2;
         const durationSeconds2 = duration2 / 1000;
         verifyingTimeBenchmarkData.push({name: `${dateString}`, duration: durationSeconds2});
         fs.writeFileSync('./apps/docs/public/benchmarks/proof-verifying.json', JSON.stringify(verifyingTimeBenchmarkData));
         
-        expect(verify(proofResponse.toJSON(), ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey)).toBeTruthy();
+        expect(verify(proofResponse.proof.toJSON(), ZkProgramsDetails["AttestSingleCredentialProperty"].verificationKey)).toBeTruthy();
     });
 });

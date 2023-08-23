@@ -2,6 +2,10 @@ import { Callout } from 'nextra-theme-docs'
 
 # The Herald Stack
 
+<Callout type="default" emoji="⚠️">
+Note: These are outdated and need to be updated.
+</Callout>
+
 Herald is a thin wrapper around SnarkyJS. Herald currently has three layers:
 - [**@herald-sdk/data-model**](#herald-sdkdata-model) - this package provides classes and utilities for managing claims, signed claims, and other data structures relevant to Zero-Knowledge Proofs and their associated cryptographic functions.
 - [**@herald-sdk/provable-programs**](#herald-sdkprovable-programs) - this package provides a single `ZkProgram` that allows users to attest to their credentials per some `Rule` provided by a challenger.
@@ -84,7 +88,7 @@ The return type for the prove method in the `Credential` class. Contains:
   - `verificationKey`: A string that represents the key used for verification.
 
 ##### Class: `Credential`
-This class represents a digital credential containing a `MerkleMap` of claims (claim), a signed version of that map (`signedClaim`), and a dictionary of claims (`credential`).
+This class represents a digital credential containing a `MerkleMap` of claims (claim), a signed version of that map (`signedClaim`), a flat dictionary of claims (`credential`), and a verifiable credential (`verifiableCredential`).
 
 ###### Constructor:
     - Parameters:
@@ -94,14 +98,14 @@ This class represents a digital credential containing a `MerkleMap` of claims (c
 
 
 ###### Static Method: `create`
-    Description: An Issuer can construct a `Credential` object by taking in a dictionary of claims and a private key from the issuer.
+    Description: An Issuer can construct a `Credential` object by taking in a string credential object of claims and a private key from the issuer.
     - Parameters:
-      - `claims`: A dictionary representing multiple claims.
+      - `claims`: A credential string representing multiple claims.
       - `issuerPrvKey`: The private key of the issuer.
 
 
 ###### Method: `verify`
-    Description: Verifies the authenticity of the `Credential` object based on the given issuer and subject public keys.
+    Description: a test utility method that verifies the authenticity of the `Credential` object based on the given issuer and subject public keys.
     - Parameters:
       - `issuerPubKey`: The public key of the issuer.
       - `subjectPubKey`: The public key of the subject (credential holder).

@@ -3,10 +3,8 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { PrivateKey } from 'snarkyjs';
 import { Credential } from './credential';
-import { isClaimsObject } from './utils';
 import fs from 'fs';
 import path from 'path';
-import { flattenObject } from '@herald-sdk/data-model';
 
 yargs(hideBin(process.argv))
     .command(
@@ -33,20 +31,16 @@ yargs(hideBin(process.argv))
             }
         },
         (argv) => {
-            const parsedClaims = JSON.parse(argv.claims);
-            let claims;
-            if (!isClaimsObject(parsedClaims)) {
-                claims = flattenObject(parsedClaims)
-            } else {
-                claims = parsedClaims;
-            }
+            const parsedClaims = JSON.parse(argv.claims);  
+            const claimsString = JSON.stringify(parsedClaims)
             const issuerPrvKey = PrivateKey.fromBase58(argv.issuerPrvKey);
-            const credential = Credential.create(claims, issuerPrvKey);
+            const credential = Credential.create(claimsString, issuerPrvKey);
             
             // save credential to file
             //const claim = credential.claim; // merkle tree, doesn't need to be stored, can be reconstructed from flatCredentials
             const signedClaim = credential.signedClaim.toJSON(); // this is a Struct
             const flatCredentials = credential.credential; // flat dictionary of claims
+            const verifiableCredential = credential.verifiableCredential;
 
             // Determine the save directory
             let saveDir: string = (typeof argv.save === "string") ? argv.save : './artifacts';
@@ -60,6 +54,7 @@ yargs(hideBin(process.argv))
             fs.writeFileSync(path.join(saveDir, 'signedClaim.json'), JSON.stringify(signedClaim, null, 2));
             fs.writeFileSync(path.join(saveDir, 'flatCredentials.json'), JSON.stringify(flatCredentials, null, 2));
             fs.writeFileSync(path.join(saveDir, 'credential.json'), JSON.stringify(parsedClaims, null, 2));
+            fs.writeFileSync(path.join(saveDir, 'verifiableCredential.json'), JSON.stringify(verifiableCredential, null, 2));
 
             console.log(`Data saved in ${saveDir}`);
         }
