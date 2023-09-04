@@ -71,5 +71,6 @@ describe('KYCDepositCompliantContract', () => {
     console.log("new state", await zkApp.depositTotal.get());
     expect(await zkApp.depositTotal.get()).toEqual(initialDepositValue.add(amount));
   });
+  // TODO: add more interesting contracts and zkPrograms
 
 });
