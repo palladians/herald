@@ -14,9 +14,8 @@ describe('Credential', () => {
         over18: "true", 
         kyc: "passed", 
         subject: subjectPrvKey.toPublicKey()
-      };
-      
-      const credential = Credential.create(claims, issuerPrvKey);
+      };      
+      const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
       expect(credential).toBeTruthy();
     });
   
@@ -29,8 +28,8 @@ describe('Credential', () => {
         subject: subjectPrvKey.toPublicKey()
       };
 
-      const credential = Credential.create(claims, issuerPrvKey);
-      const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey());
+      const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+      const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey(), "subject");
       expect(isValid).toBe(true);
     });
 
@@ -44,8 +43,8 @@ describe('Credential', () => {
         subject: subjectPrvKey.toPublicKey()
       };
 
-      const credential = Credential.create(claims, issuerPrvKey);
-      const isValid = credential.verify(wrongIssuerPubKey, subjectPrvKey.toPublicKey());
+      const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+      const isValid = credential.verify(wrongIssuerPubKey, subjectPrvKey.toPublicKey(), "subject");
       expect(isValid).toBe(false);
     });
 
@@ -58,8 +57,8 @@ describe('Credential', () => {
             subject: subjectPrvKey.toPublicKey()
         };
 
-        const credential = Credential.create(claims, issuerPrvKey);
-        const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey());
+        const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+        const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey(), "subject");
         expect(isValid).toBe(true);
     });
     it('can prove a claim', async () => {
@@ -77,7 +76,7 @@ describe('Credential', () => {
             issuerPubKey: issuerPubKey
         };
         // issue credentials to subject
-        const credential = Credential.create(claims, issuerPrvKey);
+        const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
         // create rule to prove
         const property = "kyc";
         const operation = "eq";
@@ -93,8 +92,8 @@ describe('Credential', () => {
         }
         // issuer must sign the proof themselves
         const proofResponse = await credential.prove("age", challenge, issuerPrvKey, "AttestSingleCredentialProperty");
-        console.log("attestationProof Verification: ", await verify(proofResponse.toJSON(), zkPrgDetails.verificationKey));
+        console.log("attestationProof Verification: ", await verify(proofResponse.proof.toJSON(), zkPrgDetails.verificationKey));
         fs.writeFileSync(path.join('./test/test_proofs', 'attestationProof.json'), JSON.stringify(proofResponse, null, 2));
-        expect(verify(proofResponse.toJSON(), zkPrgDetails.verificationKey)).toBeTruthy();
+        expect(verify(proofResponse.proof.toJSON(), zkPrgDetails.verificationKey)).toBeTruthy();
     });
 });

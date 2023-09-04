@@ -1,6 +1,7 @@
 import { KYCDepositCompliantContract } from './contracts/KYCDepositCompliantContract';
 import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'snarkyjs';
 import { loadProofJSON, convertProof } from './utils/utils';
+import { AttestationProof } from '@herald-sdk/provable-programs';
 /*
  * This file tests how to test the `KYCDepositCompliantContract` smart contract. 
  * See https://docs.minaprotocol.com/zkapps for more info.
@@ -53,7 +54,7 @@ describe('KYCDepositCompliantContract', () => {
   it('A wallet loads an attestation proof type it is knows of, and increments the depositTotal value of the contract', async () => {
     // Load AttestationProof
     const attestationProofJSON = loadProofJSON();
-    const attestationProof = convertProof(attestationProofJSON);
+    const attestationProof = convertProof(attestationProofJSON)
     expect(attestationProof).toBeDefined();
     // Define amount to deposit
     const amount = Field(100);

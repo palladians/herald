@@ -81,4 +81,4 @@ export const AttestSingleCredentialPropertyPrivateSubject = Experimental.ZkProgr
  * Class representation for the Attestation Proof derived from the ZkProgram `AttestSingleCredentialProperty`.
  * @public
  */
-export class AttestationProof extends Experimental.ZkProgram.Proof(AttestSingleCredentialProperty){};
+export class AttestationProof extends Experimental.ZkProgram.Proof(AttestSingleCredentialPropertyPrivateSubject){};

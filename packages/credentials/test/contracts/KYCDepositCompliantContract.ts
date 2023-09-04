@@ -12,7 +12,7 @@ export class KYCDepositCompliantContract extends SmartContract {
  @state(Field) depositTotal = State<Field>();
 
  // initialize the value to 0
- init() {
+ override init() {
     super.init();
     this.depositTotal.set(Field(0));
   }

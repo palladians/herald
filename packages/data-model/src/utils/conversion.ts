@@ -1,7 +1,7 @@
 import { Field, Encoding, Poseidon, PublicKey } from "snarkyjs";
 import { ClaimType } from "../types";
 
-let {toBytes, fromBytes} = Encoding.Bijective.Fp;
+//let {toBytes, fromBytes} = Encoding.Bijective.Fp;
 
 /**
  * 
@@ -9,9 +9,10 @@ let {toBytes, fromBytes} = Encoding.Bijective.Fp;
  * @returns a field
  */
 export function stringToField(str: string): Field {
-    const bytes = Buffer.from(str)
+    //const bytes = Buffer.from(str)
+    const fields = Encoding.stringToFields(str)
     // use Poseidon hash function to convert bytes to single field
-    return Poseidon.hash(fromBytes(bytes));
+    return Poseidon.hash(fields);
   }
 
 /**
@@ -57,8 +58,9 @@ export function publicKeyHash(publicKey: PublicKey): Field {
  * @returns a string
  */
 export function fieldToString(field: Field[]): string {
-    const bytes = toBytes(field);
-    return Buffer.from(bytes).toString();
+    //const bytes = toBytes(field);
+    //return Buffer.from(bytes).toString();
+    return Encoding.stringFromFields(field);
   }
 
 /**
