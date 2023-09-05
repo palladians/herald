@@ -46,6 +46,7 @@ describe("AttestSingleCredentialProperty", () => {
         const subjectPubKey = subjectPrvKey.toPublicKey();
         challenge = { issuerPubKey, subjectPubKey, provingRule: rule };
         compiledArtifacts = await AttestSingleCredentialProperty.compile();
+        console.log("compiledArtifacts", compiledArtifacts)
     });
 /*
     it("should verify a valid credential", async () => {

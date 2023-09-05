@@ -8,8 +8,8 @@ import path from 'path';
 
 describe('Credential', () => {
     it('can construct a credential', () => {
-      const subjectPrvKey = PrivateKey.random();
-      const issuerPrvKey = PrivateKey.random();
+      const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
+      const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
       const claims: {[key: string]: ClaimType} = {
         over18: "true", 
         kyc: "passed", 
@@ -20,8 +20,8 @@ describe('Credential', () => {
     });
   
     it('can validate the signature', () => {
-      const subjectPrvKey = PrivateKey.random();
-      const issuerPrvKey = PrivateKey.random();
+      const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
+      const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
       const claims: {[key: string]: ClaimType} = {
         over18: "true", 
         kyc: "passed", 
@@ -34,8 +34,8 @@ describe('Credential', () => {
     });
 
     it('does not validate the signature with wrong public key', () => {
-      const subjectPrvKey = PrivateKey.random();
-      const issuerPrvKey = PrivateKey.random();
+      const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
+      const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
       const wrongIssuerPubKey = PrivateKey.random().toPublicKey();
       const claims: {[key: string]: ClaimType} = {
         over18: "true", 
@@ -49,8 +49,8 @@ describe('Credential', () => {
     });
 
     it('verify claim is made about the correct subject', () => {
-        const subjectPrvKey = PrivateKey.random();
-        const issuerPrvKey = PrivateKey.random();
+      const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
+      const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
         const claims: {[key: string]: ClaimType} = {
             over18: "true", 
             kyc: "passed", 
@@ -65,8 +65,8 @@ describe('Credential', () => {
       /**
        * Issuer must make a claim about a subject AND prove the claim
        */
-        const subjectPrvKey = PrivateKey.random();
-        const issuerPrvKey = PrivateKey.random();
+      const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
+      const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
         const issuerPubKey = issuerPrvKey.toPublicKey();
         const subjectPubKey = subjectPrvKey.toPublicKey();
         const claims: {[key: string]: ClaimType} = {
@@ -84,16 +84,17 @@ describe('Credential', () => {
         const rule = new Rule(property, operation, value);
         console.log("rule: ", rule);
         // create challenge - this challenge must be signed by the issuer
-        const challenge: PublicInputArgs = {issuerPubKey: issuerPubKey, subjectPubKey: issuerPubKey, provingRule: rule};
+        // WHY AM I USING THE ISSUER PUBLIC KEY AS THE SUBJECT??
+        const challenge: PublicInputArgs = {issuerPubKey: issuerPubKey, subjectPubKey: subjectPubKey, provingRule: rule};
 
         const zkPrgDetails = ZkProgramsDetails["AttestSingleCredentialProperty"];
         if (!zkPrgDetails) {
             throw new Error("ZkProgram not found");
         }
         // issuer must sign the proof themselves
-        const proofResponse = await credential.prove("age", challenge, issuerPrvKey, "AttestSingleCredentialProperty");
+        const proofResponse = await credential.prove("age", challenge, subjectPrvKey, "AttestSingleCredentialProperty");
         console.log("attestationProof Verification: ", await verify(proofResponse.proof.toJSON(), zkPrgDetails.verificationKey));
-        fs.writeFileSync(path.join('./test/test_proofs', 'attestationProof.json'), JSON.stringify(proofResponse, null, 2));
+        fs.writeFileSync(path.join('./test/test_proofs', 'attestationProof.json'), JSON.stringify(proofResponse.proof, null, 2));
         expect(verify(proofResponse.proof.toJSON(), zkPrgDetails.verificationKey)).toBeTruthy();
     });
 });

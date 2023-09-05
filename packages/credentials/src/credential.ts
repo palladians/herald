@@ -76,7 +76,7 @@ export class Credential {
         return true;
     }
 
-    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey, ZkProgram: string): Promise<{proof: Proof<PublicInputArgs, void>, verifiablePresentation: any}> {
+    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey, ZkProgram: string): Promise<{proof: Proof<PublicInputArgs, PublicKey>, verifiablePresentation: any}> {
         const claimWitness = this.claim.getWitness(claimKey);
         const claimValue = this.claim.getField(claimKey);
         

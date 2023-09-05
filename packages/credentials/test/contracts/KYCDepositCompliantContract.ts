@@ -22,9 +22,13 @@ export class KYCDepositCompliantContract extends SmartContract {
     this.depositTotal.getAndAssertEquals();
     // 2. verify proof
     proof.verify();
-    // 3. create new state
-    const newState = this.depositTotal.get().add(amount);;
-    // 4. update counter
+    // 3. verify proof's public output contains the depositor's info
+    /* verify sender is PoI in proof */
+    const proofSubject = proof.publicOutput
+    this.sender.assertEquals(proofSubject)
+    // 4. create new state
+    const newState = this.depositTotal.get().add(amount);
+    // 5. update counter
     this.depositTotal.set(newState);
  }
 }

@@ -1,4 +1,4 @@
-import { Field, Experimental, Bool, MerkleMapWitness } from 'snarkyjs';
+import { Field, Experimental, Bool, MerkleMapWitness, PublicKey } from 'snarkyjs';
 import { CredentialPresentation, SignedClaim, stringToField } from '@herald-sdk/data-model';
 import { PublicInputArgs } from './utils/types';
 
@@ -39,6 +39,7 @@ function handleOperation(claimValue: Field, operation: Field, value: Field): Boo
  */
 export const AttestSingleCredentialProperty = Experimental.ZkProgram({
   publicInput: PublicInputArgs,
+  publicOutput: PublicKey,
 
   methods: {
     attest: {
@@ -55,7 +56,7 @@ export const AttestSingleCredentialProperty = Experimental.ZkProgram({
        * The method checks the validity of the signatures and verifies the match of computed roots. It also infers value based on given operation rules.
        */
 
-      method(publicInputs: PublicInputArgs, claim: MerkleMapWitness, claimValue: Field, signedClaim: SignedClaim, credentialPresentation: CredentialPresentation) {
+      method(publicInputs: PublicInputArgs, claim: MerkleMapWitness, claimValue: Field, signedClaim: SignedClaim, credentialPresentation: CredentialPresentation): PublicKey {
         // check the Claim root is signed by the expected issuer
         signedClaim.signatureIssuer.verify(
           publicInputs.issuerPubKey,
@@ -72,6 +73,8 @@ export const AttestSingleCredentialProperty = Experimental.ZkProgram({
 
         let inferredValue = handleOperation(claimValue, publicInputs.provingRule.operation, Field.from(publicInputs.provingRule.value));
         inferredValue?.assertTrue('No valid operation matched for the given input.');
+
+        return publicInputs.subjectPubKey;
       },
     },
   },
@@ -81,4 +84,7 @@ export const AttestSingleCredentialProperty = Experimental.ZkProgram({
  * Class representation for the Attestation Proof derived from the ZkProgram `AttestSingleCredentialProperty`.
  * @public
  */
-export class AttestationProof extends Experimental.ZkProgram.Proof(AttestSingleCredentialProperty){};
+export class AttestationProof extends Experimental.ZkProgram.Proof(AttestSingleCredentialProperty) {
+  // we can add methods here
+  static publicOutput = this.prototype.publicOutput
+};

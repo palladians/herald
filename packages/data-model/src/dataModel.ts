@@ -81,15 +81,26 @@ export class CredentialPresentation extends Struct({
  * A proving rule is a rule that can be used to infer a claim from another claim
  * this can be provided by a challenger to a prover to a property on a claim
  */
+
 export class Rule extends Struct({
   field: Field, // this is the field of the claim object NOT a Field snarkyjs type, it is converted to a field
   operation: Field, // lt, lte, eq, gte, gt
   value: Field, // the value to compare the field to
 }) {
   constructor(field: string, operation: string, value: number | string | Field) {
+    // Convert the inputs as needed
     if (typeof value === "string") {
       value = stringToField(value);
-    super({field: stringToField(field), operation: stringToField(operation), value: typeof value === "number" ? numberToField(value) : value});
     }
+    if (typeof value === "number") {
+      value = numberToField(value);
+    }
+    // Call the super constructor after conversions
+    super({
+      field: stringToField(field),
+      operation: stringToField(operation),
+      value: value
+    });
   }
 }
+

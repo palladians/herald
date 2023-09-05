@@ -36,7 +36,7 @@ export class PublicInputIssuerArgs extends Struct({
 
 
 export type proveReturnType = {
-    attestationProof: Proof<PublicInputArgs, void>,
+    attestationProof: Proof<PublicInputArgs, PublicKey>,
 };
 
 // Define types for specific function arguments and return values.
