@@ -1,8 +1,18 @@
-import { PrivateKey, Proof, PublicKey } from "snarkyjs";
+import { Bool, PrivateKey, Proof, PublicKey, Signature } from "snarkyjs";
 import { Claim, ClaimType, CredentialPresentation, SignedClaim, constructClaim, constructSignedClaim, flattenObject, stringToField } from "@herald-sdk/data-model";
-import { PublicInputArgs, ZkProgramsDetails } from "@herald-sdk/provable-programs";
+import { PublicInputArgs, ZkProgramsDetails, KycClaimProgram, KycClaimInputs } from "@herald-sdk/provable-programs";
 import { handleOperation, isClaimsObject } from "./utils";
 
+
+/**
+ * This `Credential` class is focused on issuing a verifiable
+ * credential to a holder/subject. The holder/subject can then 
+ * use that credential, specifically its `proof` field, as arguments
+ * to ZkPrograms or Smart Contracts.
+ * 
+ * However, this `Credential` class can also be used to attest to
+ * various properties about a credential per some constraint (e.g. a `Rule`)
+ */
 export class Credential {
     public claim: Claim; // A MerkleMap
     public signedClaim: SignedClaim; // Signed MerkleMap Root by issuer
@@ -15,10 +25,14 @@ export class Credential {
         this.credential = credential;
         this.verifiableCredential = verifiableCredential;
     }
-    
-    public static create(stringClaims: string, issuerPrvKey: PrivateKey | string): Credential  {
+    // TODO:
+    // Create should also abstract over proving, because constructing a `proof` is necessary
+    public static async create(stringClaims: string, issuerPrvKey: PrivateKey | string, subjectPubKey: PublicKey | string): Promise<Credential>  {
         if (typeof issuerPrvKey === "string") {
             issuerPrvKey = PrivateKey.fromBase58(issuerPrvKey);
+        }
+        if (typeof subjectPubKey === "string") {
+            subjectPubKey = PublicKey.fromBase58(subjectPubKey)
         }
         const parsedClaims = JSON.parse(stringClaims)
         let claims;
@@ -33,8 +47,14 @@ export class Credential {
         const signedClaim = constructSignedClaim(claim, issuerPrvKey);
         // create verifiable credential - can be used to make proofs
         // this could also be the proof from a zkProgram
+        // hardcoded to kyc program but should make configurable
+        // TODO: Make this an argument of `create()`
+        await KycClaimProgram.compile();
+        const signatureIssuer = Signature.create(issuerPrvKey, Bool(true).toFields())
+        const zkProgramInputs = new KycClaimInputs(issuerPrvKey.toPublicKey(), subjectPubKey, Bool(true), signatureIssuer)
+        const proof = await KycClaimProgram.createKycClaimProof(zkProgramInputs)
         const verifiableCredentialProofFields = {
-            proof: signedClaim.toJSON()
+            proof: proof.toJSON()
         }
         // Add verifiableCredentialProofFields to parsedClaims
         const verifiableCredential = {
@@ -76,7 +96,18 @@ export class Credential {
         return true;
     }
 
-    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey, ZkProgram: string): Promise<{proof: Proof<PublicInputArgs, PublicKey>, verifiablePresentation: any}> {
+    // TODO: Improve this to prove arbitary claims only and not generate verifiable credentials
+    // Change name from prove to attest
+    /**
+     * 
+     * @param claimKey 
+     * @param challenge 
+     * @param subjectPrvKey 
+     * @param ZkProgram 
+     * @returns 
+     * THIS IS AN EXPERIMENTAL METHOD
+     */
+    public async prove(claimKey: string, challenge: PublicInputArgs, subjectPrvKey: PrivateKey, ZkProgram: string): Promise<{proof: Proof<PublicInputArgs, PublicKey>, verifiableCredential: any}> {
         const claimWitness = this.claim.getWitness(claimKey);
         const claimValue = this.claim.getField(claimKey);
         
@@ -116,12 +147,14 @@ export class Credential {
 
          */
 
-        const verifiablePresentation = {
+        // this is actually a verifiable credential
+        // TODO: move this to create
+        const verifiableCredential = {
             "@context": [
                 "https://www.w3.org/2018/credentials/v1",
                 "https://www.w3.org/2018/credentials/examples/v1"
             ],
-            "type": "VerifiablePresentation",
+            "type": "verifiableCredential",
             "verifiableCredential": [
                 {
                 "@context": [
@@ -144,6 +177,6 @@ export class Credential {
         }],
         "proof" : proof.attestationProof.toJSON()
         }
-        return { proof: proof.attestationProof, verifiablePresentation: verifiablePresentation };
+        return { proof: proof.attestationProof, verifiableCredential: verifiableCredential };
     }
 }

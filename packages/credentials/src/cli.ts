@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { PrivateKey } from 'snarkyjs';
+import { PrivateKey, PublicKey } from 'snarkyjs';
 import { Credential } from './credential';
 import fs from 'fs';
 import path from 'path';
@@ -23,6 +23,12 @@ yargs(hideBin(process.argv))
                 type: 'string', // base58 private key
                 demandOption: true,
             },
+            subjectPubKey: {
+                description: 'Subject public key',
+                alias: 'p',
+                type: 'string', // base58 public key,
+                demandOption: true,
+            },
             save: {
                 description: 'Path for saving the artefacts',
                 alias: 's',
@@ -30,11 +36,12 @@ yargs(hideBin(process.argv))
                 demandOption: true,
             }
         },
-        (argv) => {
+        async (argv) => {
             const parsedClaims = JSON.parse(argv.claims);  
             const claimsString = JSON.stringify(parsedClaims)
             const issuerPrvKey = PrivateKey.fromBase58(argv.issuerPrvKey);
-            const credential = Credential.create(claimsString, issuerPrvKey);
+            const subjectPubKey = PublicKey.fromBase58(argv.subjectPubKey);
+            const credential = await Credential.create(claimsString, issuerPrvKey, subjectPubKey);
             
             // save credential to file
             //const claim = credential.claim; // merkle tree, doesn't need to be stored, can be reconstructed from flatCredentials

@@ -1,5 +1,5 @@
 import { Field, SmartContract, state, State, method} from 'snarkyjs';
-import { AttestationProof } from '@herald-sdk/provable-programs';
+import { KycProof } from '@herald-sdk/provable-programs';
 /**
  * Basic Example for a counter zkApp with recursion
  * See https://docs.minaprotocol.com/zkapps for more info.
@@ -17,14 +17,14 @@ export class KYCDepositCompliantContract extends SmartContract {
     this.depositTotal.set(Field(0));
   }
 
- @method deposit(proof: AttestationProof, amount: Field) {
+ @method deposit(proof: KycProof, amount: Field) {
     // 1. assert the current counter value
     this.depositTotal.getAndAssertEquals();
     // 2. verify proof
     proof.verify();
     // 3. verify proof's public output contains the depositor's info
     /* verify sender is PoI in proof */
-    const proofSubject = proof.publicOutput
+    const proofSubject = proof.publicInput.subjectPubKey
     this.sender.assertEquals(proofSubject)
     // 4. create new state
     const newState = this.depositTotal.get().add(amount);

@@ -35,34 +35,34 @@ describe('Credential Construction', () => {
       claimsString = JSON.stringify(claims);
   });
 
-    it('can construct a credential', () => {
-      const credential = Credential.create(claimsString, issuerPrvKey);
+    it('can construct a credential', async () => {
+      const credential = await Credential.create(claimsString, issuerPrvKey, subjectPrvKey.toPublicKey());
       expect(credential).toBeTruthy();
       console.log("verifiable credential", credential.verifiableCredential)
       console.log("credential", credential.credential)
     });
   
-    it('can validate the signature', () => {
-      const credential = Credential.create(claimsString, issuerPrvKey);
+    it('can validate the signature', async () => {
+      const credential = await Credential.create(claimsString, issuerPrvKey, subjectPrvKey.toPublicKey());
       const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey(), "credentialSubject.id");
       expect(isValid).toBe(true);
     });
 
-    it('does not validate the signature with wrong public key', () => {
+    it('does not validate the signature with wrong public key', async () => {
       const wrongIssuerPubKey = PrivateKey.random().toPublicKey();
-      const credential = Credential.create(claimsString, issuerPrvKey);
+      const credential = await Credential.create(claimsString, issuerPrvKey, subjectPrvKey.toPublicKey());
       const isValid = credential.verify(wrongIssuerPubKey, subjectPrvKey.toPublicKey(), "credentialSubject.id");
       expect(isValid).toBe(false);
     });
 
-    it('verify claim is made about the correct subject', () => {
-        const credential = Credential.create(claimsString, issuerPrvKey);
+    it('verify claim is made about the correct subject', async () => {
+        const credential = await Credential.create(claimsString, issuerPrvKey, subjectPrvKey.toPublicKey());
         const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey(), "credentialSubject.id");
         expect(isValid).toBe(true);
     });
 
-    it('can reconstruct/recreate a credential from a verifiable credential string', () => {
-      const credential = Credential.create(claimsString, issuerPrvKey);
+    it('can reconstruct/recreate a credential from a verifiable credential string', async () => {
+      const credential = await Credential.create(claimsString, issuerPrvKey, subjectPrvKey.toPublicKey());
       const verifiableCredential = JSON.stringify(credential.verifiableCredential);
 
       const recreatedCredential = Credential.recreate(verifiableCredential);

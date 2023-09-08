@@ -18,7 +18,7 @@ describe('Credential Benchmark', () => {
             subject: subjectPrvKey.toPublicKey()
         };
         // todo: change to a W3C credential 
-        const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+        const credential = await Credential.create(JSON.stringify(claims), issuerPrvKey, subjectPrvKey.toPublicKey());
         const property = "age";
         const operation = "gte";
         const value = 18;

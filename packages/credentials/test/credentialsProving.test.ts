@@ -33,7 +33,7 @@ describe('Credential', () => {
       claimsString = JSON.stringify(claims);
     });
     it('can prove a claim', async () => {
-        const credential = Credential.create(claimsString, issuerPrvKey);
+        const credential = await Credential.create(claimsString, issuerPrvKey, subjectPrvKey.toPublicKey());
         // create rule to prove
         const property = "credentialSubject.degree.type";
         const operation = "eq";

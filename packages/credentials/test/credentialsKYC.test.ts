@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 describe('Credential', () => {
-    it('can construct a credential', () => {
+    it('can construct a credential', async () => {
       const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
       const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
       const claims: {[key: string]: ClaimType} = {
@@ -15,11 +15,11 @@ describe('Credential', () => {
         kyc: "passed", 
         subject: subjectPrvKey.toPublicKey()
       };      
-      const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+      const credential = await Credential.create(JSON.stringify(claims), issuerPrvKey, subjectPrvKey.toPublicKey());
       expect(credential).toBeTruthy();
     });
   
-    it('can validate the signature', () => {
+    it('can validate the signature', async () => {
       const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
       const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
       const claims: {[key: string]: ClaimType} = {
@@ -28,12 +28,12 @@ describe('Credential', () => {
         subject: subjectPrvKey.toPublicKey()
       };
 
-      const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+      const credential = await Credential.create(JSON.stringify(claims), issuerPrvKey, subjectPrvKey.toPublicKey());
       const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey(), "subject");
       expect(isValid).toBe(true);
     });
 
-    it('does not validate the signature with wrong public key', () => {
+    it('does not validate the signature with wrong public key', async () => {
       const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
       const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
       const wrongIssuerPubKey = PrivateKey.random().toPublicKey();
@@ -43,12 +43,12 @@ describe('Credential', () => {
         subject: subjectPrvKey.toPublicKey()
       };
 
-      const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+      const credential = await Credential.create(JSON.stringify(claims), issuerPrvKey, subjectPrvKey.toPublicKey());
       const isValid = credential.verify(wrongIssuerPubKey, subjectPrvKey.toPublicKey(), "subject");
       expect(isValid).toBe(false);
     });
 
-    it('verify claim is made about the correct subject', () => {
+    it('verify claim is made about the correct subject', async () => {
       const subjectPrvKey = PrivateKey.fromBase58("EKE1c5UXWmKpzSZxkh67MPUeujYtoVppkGKrv3zC9CFXnWAzkktu");
       const issuerPrvKey = PrivateKey.fromBase58("EKDhdt1SX7i1cp7KZRzqVdJDYUf16HqM4bGpUzF98jSh3hzZTZLr");
         const claims: {[key: string]: ClaimType} = {
@@ -57,7 +57,7 @@ describe('Credential', () => {
             subject: subjectPrvKey.toPublicKey()
         };
 
-        const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+        const credential = await Credential.create(JSON.stringify(claims), issuerPrvKey, subjectPrvKey.toPublicKey());
         const isValid = credential.verify(issuerPrvKey.toPublicKey(), subjectPrvKey.toPublicKey(), "subject");
         expect(isValid).toBe(true);
     });
@@ -76,7 +76,7 @@ describe('Credential', () => {
             issuerPubKey: issuerPubKey
         };
         // issue credentials to subject
-        const credential = Credential.create(JSON.stringify(claims), issuerPrvKey);
+        const credential = await Credential.create(JSON.stringify(claims), issuerPrvKey, subjectPrvKey.toPublicKey());
         // create rule to prove
         const property = "kyc";
         const operation = "eq";
@@ -84,7 +84,7 @@ describe('Credential', () => {
         const rule = new Rule(property, operation, value);
         console.log("rule: ", rule);
         // create challenge - this challenge must be signed by the issuer
-        // WHY AM I USING THE ISSUER PUBLIC KEY AS THE SUBJECT??
+        // WHY AM I USING THE ISSUER PUBLIC KEY AS THE SUBJECT?? because there is a close coupling of `prove` and `create` methods
         const challenge: PublicInputArgs = {issuerPubKey: issuerPubKey, subjectPubKey: subjectPubKey, provingRule: rule};
 
         const zkPrgDetails = ZkProgramsDetails["AttestSingleCredentialProperty"];
@@ -95,6 +95,8 @@ describe('Credential', () => {
         const proofResponse = await credential.prove("age", challenge, subjectPrvKey, "AttestSingleCredentialProperty");
         console.log("attestationProof Verification: ", await verify(proofResponse.proof.toJSON(), zkPrgDetails.verificationKey));
         fs.writeFileSync(path.join('./test/test_proofs', 'attestationProof.json'), JSON.stringify(proofResponse.proof, null, 2));
+        fs.writeFileSync(path.join('./test/test_artifacts', 'attestationCredential.json'), JSON.stringify(proofResponse.verifiableCredential, null, 2));
+        fs.writeFileSync(path.join('./test/test_artifacts', 'verifiableCredential.json'), JSON.stringify(credential.verifiableCredential, null, 2));
         expect(verify(proofResponse.proof.toJSON(), zkPrgDetails.verificationKey)).toBeTruthy();
     });
 });
