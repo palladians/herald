@@ -1,4 +1,4 @@
-import { Field, PublicKey } from "snarkyjs";
+import { Field, PublicKey } from "o1js";
 import { Claim, CredentialPresentation } from "../dataModel";
 
 /**

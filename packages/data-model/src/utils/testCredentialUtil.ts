@@ -1,4 +1,4 @@
-import { PublicKey } from "snarkyjs";
+import { PublicKey } from "o1js";
 import { ClaimType } from "../types"
 import { flattenObject } from "./conversion";
 

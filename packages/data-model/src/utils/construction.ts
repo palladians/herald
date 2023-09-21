@@ -1,4 +1,4 @@
-import { PrivateKey } from "snarkyjs";
+import { PrivateKey } from "o1js";
 import { Claim, SignedClaim, CredentialPresentation } from "../dataModel";
 import { ClaimType } from "../types";
 

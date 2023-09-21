@@ -30,6 +30,6 @@
   },
   "dependencies": {
     "@jest/globals": "^29.6.2",
-    "snarkyjs": "^0.12.*"
+    "o1js": "^0.12.*"
   }
 }

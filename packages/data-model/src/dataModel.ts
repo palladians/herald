@@ -1,4 +1,4 @@
-import { Field, PrivateKey, Signature, MerkleMap, Struct, MerkleMapWitness } from 'snarkyjs';
+import { Field, PrivateKey, Signature, MerkleMap, Struct, MerkleMapWitness } from 'o1js';
 import { stringToField, claimToField, numberToField } from './utils'; 
 import { ClaimType } from './types.js';
 

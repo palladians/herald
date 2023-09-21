@@ -1,4 +1,4 @@
-import { Field, Encoding, Poseidon, PublicKey } from "snarkyjs";
+import { Field, Encoding, Poseidon, PublicKey } from "o1js";
 import { ClaimType } from "../types";
 
 //let {toBytes, fromBytes} = Encoding.Bijective.Fp;

@@ -1,4 +1,4 @@
-import { Field, SmartContract, state, State, method} from 'snarkyjs';
+import { Field, SmartContract, state, State, method, verify, VerificationKey} from 'snarkyjs';
 import { KycProof } from '@herald-sdk/provable-programs';
 /**
  * Basic Example for a counter zkApp with recursion
